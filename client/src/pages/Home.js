@@ -1,4 +1,4 @@
-// client/pages/index.js
+//client/pages/index.js
 import React from 'react';
 
 export default function Home() {
