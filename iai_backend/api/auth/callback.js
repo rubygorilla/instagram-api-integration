@@ -9,7 +9,7 @@ export default async function handler(req, res) {
   try {
     const tokenRes = await axios.get('https://graph.facebook.com/v19.0/oauth/access_token', {
       params: {
-        client_id: 1359354858675859,
+        client_id: "1359354858675859",
         client_secret: "3856a375446d139ca3a3ff7509f27d17",
         redirect_uri: "https://instagram-api-integration.vercel.app/api/auth/callback",
         code,
