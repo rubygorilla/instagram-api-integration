@@ -1,23 +1,28 @@
-// src/pages/Home.js
+// client/pages/index.js
 import React from 'react';
 
-const Home = () => {
-  const handleInstagramLogin = () => {
-    window.location.href = 'http://localhost:5000/auth/instagram';
+export default function Home() {
+  const handleLogin = () => {
+    const clientId = "productstrategywithaakash@gmail.com";
+    const redirectUri = "https://instagram-api-integration.vercel.app/api/auth/callback";
+
+    const scope = [
+      "instagram_basic",
+      "instagram_manage_insights",
+      "pages_show_list",
+    ].join(",");
+
+    const loginUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
+
+    window.location.href = loginUrl;
   };
 
   return (
-    <div className="text-center">
-      <h1 className="mb-4">Welcome to Instagram Integration</h1>
-      <p className="lead mb-4">Connect with your Instagram account to view your profile and media</p>
-      <button 
-        className="btn btn-primary btn-lg"
-        onClick={handleInstagramLogin}
-      >
+    <div style={{ padding: 30, textAlign: "center" }}>
+      <h1>📊 Instagram Insights Dashboard</h1>
+      <button onClick={handleLogin} style={{ padding: 10, fontSize: 18 }}>
         Login with Instagram
       </button>
     </div>
   );
-};
-
-export default Home;
+}
