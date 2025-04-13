@@ -3,7 +3,8 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   const { code } = req.query;
-  console.log("code = "+req.query)
+  console.log("code =", code);
+
 
   if (!code) return res.status(400).send('Missing code');
 
@@ -12,7 +13,7 @@ export default async function handler(req, res) {
       params: {
         client_id: "1359354858675859",
         client_secret: "3856a375446d139ca3a3ff7509f27d17",
-        redirect_uri: "https://instagram-api-integration.vercel.app/api/auth/callback",
+        redirect_uri: "https://iaibackend.vercel.app/api/auth/callback",
         code,
       },
     });
