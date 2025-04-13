@@ -18,11 +18,14 @@ export default async function handler(req, res) {
     });
 
     const accessToken = tokenRes.data.access_token;
+    console.log("accessToken ="+ accessToken)
 
     const pagesRes = await axios.get('https://graph.facebook.com/me/accounts', {
       params: { access_token: accessToken },
     });
 
+    console.log("pagesRes ="+pagesRes);
+    
     const page = pagesRes.data.data[0];
     const pageId = page.id;
 
