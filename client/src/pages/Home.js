@@ -11,6 +11,7 @@ export default function Home() {
       "instagram_manage_insights",
       "pages_show_list",
       "instagram_manage_comments",
+      "business_management",
     ].join(",");
 
     const loginUrl = `https://www.facebook.com/v19.0/dialog/oauth?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scope}&response_type=code`;
