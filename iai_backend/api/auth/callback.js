@@ -72,6 +72,7 @@ export default async function handler(req, res) {
     const followerCountRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
         metric: 'follower_count',
+        period: 'day',
         access_token: accessToken,
       },
     });
