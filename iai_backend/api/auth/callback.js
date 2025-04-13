@@ -1,10 +1,9 @@
 //  iai_backend/api/auth/callback.js
 import axios from 'axios';
 
-export default async function handler(req, res) {
+emodule.exports = async function handler(req, res) {
   const { code } = req.query;
-  console.log("code =", code);
-
+  console.log("code =", code); // ✅ This is now safe
 
   if (!code) return res.status(400).send('Missing code');
 
@@ -20,7 +19,6 @@ export default async function handler(req, res) {
 
     const accessToken = tokenRes.data.access_token;
 
-    // Get user's FB pages
     const pagesRes = await axios.get('https://graph.facebook.com/me/accounts', {
       params: { access_token: accessToken },
     });
@@ -28,7 +26,6 @@ export default async function handler(req, res) {
     const page = pagesRes.data.data[0];
     const pageId = page.id;
 
-    // Get Instagram business account linked to that page
     const igRes = await axios.get(`https://graph.facebook.com/${pageId}`, {
       params: {
         fields: 'instagram_business_account',
@@ -38,7 +35,6 @@ export default async function handler(req, res) {
 
     const igId = igRes.data.instagram_business_account.id;
 
-    // Fetch Instagram account stats
     const statsRes = await axios.get(`https://graph.facebook.com/${igId}/insights`, {
       params: {
         metric: 'impressions,reach,profile_views',
@@ -56,4 +52,4 @@ export default async function handler(req, res) {
     console.error(err.response?.data || err.message);
     res.status(500).send('Error fetching Instagram stats');
   }
-}
+};
