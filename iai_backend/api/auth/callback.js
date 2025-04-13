@@ -63,19 +63,31 @@ export default async function handler(req, res) {
       },
     });
 
-    // 5. Get Instagram insights (optional)
+    // 5a. Get Instagram follower count (no period)
     const followerCountRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
         metric: 'follower_count',
         access_token: accessToken,
       },
     });
-    
 
-    followerCountRes.status(200).json({
+    // 5b. Get Instagram reach (requires period)
+    const reachRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
+      params: {
+        metric: 'reach',
+        period: 'day',
+        access_token: accessToken,
+      },
+    });
+
+    // ✅ Return the profile + insights
+    res.status(200).json({
       message: 'Fetched Instagram profile and stats',
       profile: igProfile.data,
-      stats: insightsRes.data,
+      stats: {
+        follower_count: followerCountRes.data,
+        reach: reachRes.data,
+      },
     });
 
   } catch (err) {
