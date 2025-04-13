@@ -30,7 +30,9 @@ export default async function handler(req, res) {
     console.log(pagesRes.config);  
 
     const page = pagesRes.data.data[0];
+    console.log("page="+page)
     const pageId = page.id;
+    console.log("pageId="+pageId)
 
     const igRes = await axios.get(`https://graph.facebook.com/${pageId}`, {
       params: {
