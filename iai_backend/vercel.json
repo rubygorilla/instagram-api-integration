@@ -1,0 +1,10 @@
+{
+    "functions": {
+      "iai_backend/api/**/*.js": {
+        "runtime": "nodejs20.x",
+        "launcherType": "Nodejs",
+        "type": "module"
+      }
+    }
+  }
+  
