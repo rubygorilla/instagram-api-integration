@@ -24,7 +24,10 @@ export default async function handler(req, res) {
       params: { access_token: accessToken },
     });
 
-    console.log("pageRes="+JSON.stringify(pagesRes, null, 2));
+    console.log(res.data);       // ✅ The actual response payload
+    console.log(res.status);     // HTTP status code (200, 404, etc.)
+    console.log(res.headers);    // Response headers
+    console.log(res.config);  
 
     const page = pagesRes.data.data[0];
     const pageId = page.id;
