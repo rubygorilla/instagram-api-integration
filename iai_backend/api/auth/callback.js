@@ -67,6 +67,7 @@ export default async function handler(req, res) {
     const insightsRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}/insights`, {
       params: {
         metric: 'impressions,reach',
+        period: 'day',
         access_token: accessToken,
       },
     });
