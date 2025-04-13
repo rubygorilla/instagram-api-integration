@@ -64,15 +64,15 @@ export default async function handler(req, res) {
     });
 
     // 5. Get Instagram insights (optional)
-    const insightsRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}/insights`, {
+    const followerCountRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
-        metric: 'impressions,reach',
-        period: 'day',
+        metric: 'follower_count',
         access_token: accessToken,
       },
     });
+    
 
-    res.status(200).json({
+    followerCountRes.status(200).json({
       message: 'Fetched Instagram profile and stats',
       profile: igProfile.data,
       stats: insightsRes.data,
