@@ -46,7 +46,7 @@ export default async function handler(req, res) {
     console.log(igRes.headers);    // Response headers
     console.log(igRes.config); 
 
-    const igId = igRes.data.id;
+    const igId = igRes.data.instagram_business_account?.id;
     console.log("igid="+igId)
 
     const igProfile = await axios.get(`https://graph.facebook.com/v19.0/${igId}`, {
