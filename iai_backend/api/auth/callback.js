@@ -1,7 +1,7 @@
 //  iai_backend/api/auth/callback.js
 import axios from 'axios';
 
-emodule.exports = async function handler(req, res) {
+module.exports = async function handler(req, res) {
   const { code } = req.query;
   console.log("code =", code); // ✅ This is now safe
 
