@@ -49,12 +49,11 @@ export default async function handler(req, res) {
     const igId = igRes.data.id;
     console.log("igid="+igId)
 
-    const statsRes = await axios.get(`https://graph.facebook.com/${igId}/insights`, {
+    const statsRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}/insights`, {
       params: {
-        metric: 'impressions,reach,profile_views,follower_count',
-        period: 'lifetime',
+        metric: 'follower_count',
         access_token: accessToken,
-      }
+      },
     });
 
     res.status(200).json({
