@@ -24,8 +24,8 @@ export default async function handler(req, res) {
       params: { access_token: accessToken },
     });
 
-    console.log("pagesRes ="+pagesRes);
-    
+    console.log("pageRes="+JSON.stringify(pagesRes, null, 2));
+
     const page = pagesRes.data.data[0];
     const pageId = page.id;
 
