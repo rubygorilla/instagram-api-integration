@@ -66,8 +66,7 @@ export default async function handler(req, res) {
     // 5. Get Instagram insights (optional)
     const insightsRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}/insights`, {
       params: {
-        metric: 'impressions,reach,profile_views',
-        period: 'day',
+        metric: 'impressions,reach',
         access_token: accessToken,
       },
     });
