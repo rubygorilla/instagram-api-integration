@@ -4,7 +4,7 @@ import React from 'react';
 export default function Home() {
   const handleLogin = () => {
     const clientId = "1359354858675859";
-    const redirectUri = "https://instagram-api-integration.vercel.app/api/auth/callback";
+    const redirectUri = "https://iai-backend.vercel.app/api/auth/callback";
 
     const scope = [
       "instagram_basic",
