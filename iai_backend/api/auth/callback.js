@@ -41,6 +41,11 @@ export default async function handler(req, res) {
       },
     });
 
+    console.log(igRes.data);       // ✅ The actual response payload
+    console.log(igRes.status);     // HTTP status code (200, 404, etc.)
+    console.log(igRes.headers);    // Response headers
+    console.log(igRes.config); 
+
     const igId = igRes.data.instagram_business_account.id;
 
     const statsRes = await axios.get(`https://graph.facebook.com/${igId}/insights`, {
