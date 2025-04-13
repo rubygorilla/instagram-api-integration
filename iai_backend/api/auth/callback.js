@@ -1,9 +1,9 @@
-//  iai_backend/api/auth/callback.js
+// iai_backend/api/auth/callback.js
 import axios from 'axios';
 
-module.exports = async function handler(req, res) {
+export default async function handler(req, res) {
   const { code } = req.query;
-  console.log("code =", code); // ✅ This is now safe
+  console.log("code =", code);
 
   if (!code) return res.status(400).send('Missing code');
 
@@ -52,4 +52,4 @@ module.exports = async function handler(req, res) {
     console.error(err.response?.data || err.message);
     res.status(500).send('Error fetching Instagram stats');
   }
-};
+}
