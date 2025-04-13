@@ -1,8 +1,0 @@
-{
-    "functions": {
-      "iai_backend/api/**/*.js": {
-        "memory": 512
-      }
-    }
-  }
-  
