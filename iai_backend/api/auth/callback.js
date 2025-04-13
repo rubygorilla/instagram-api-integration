@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   const { code } = req.query;
-  console.log("code =", code);
+  console.log("Received code =", code);
 
   if (!code) return res.status(400).send('Missing code');
 
@@ -19,21 +19,22 @@ export default async function handler(req, res) {
     });
 
     const accessToken = tokenRes.data.access_token;
-    console.log("accessToken =", accessToken);
+    console.log("✅ Access Token:", accessToken);
 
     // 2. Get businesses the user manages
     const businessRes = await axios.get('https://graph.facebook.com/v19.0/me/businesses', {
       params: { access_token: accessToken },
     });
 
-    console.log("businessRes =", businessRes.data);
+    const businesses = businessRes.data.data;
+    console.log("✅ Businesses:", businesses);
 
-    if (!businessRes.data.data.length) {
+    if (!businesses.length) {
       return res.status(404).json({ message: 'No businesses found for this user' });
     }
 
-    const businessId = businessRes.data.data[0].id;
-    console.log("businessId =", businessId);
+    const businessId = businesses[0].id;
+    console.log("✅ Business ID:", businessId);
 
     // 3. Get owned pages under that business
     const ownedPagesRes = await axios.get(`https://graph.facebook.com/v19.0/${businessId}/owned_pages`, {
@@ -43,9 +44,10 @@ export default async function handler(req, res) {
       },
     });
 
-    console.log("ownedPagesRes =", ownedPagesRes.data);
+    const pages = ownedPagesRes.data.data;
+    console.log("✅ Owned Pages:", pages);
 
-    const page = ownedPagesRes.data.data[0];
+    const page = pages[0];
     if (!page) return res.status(404).json({ message: 'No owned pages found under business' });
 
     const pageId = page.id;
@@ -53,17 +55,20 @@ export default async function handler(req, res) {
 
     if (!igId) return res.status(404).json({ message: 'No Instagram business account connected to the Page' });
 
-    console.log("Instagram Business Account ID =", igId);
+    console.log("✅ Instagram Business Account ID:", igId);
 
     // 4. Get Instagram profile details
-    const igProfile = await axios.get(`https://graph.facebook.com/v19.0/${igId}`, {
+    const igProfileRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}`, {
       params: {
         fields: 'username,profile_picture_url,followers_count,follows_count',
         access_token: accessToken,
       },
     });
 
-    // 5a. Get Instagram follower count (no period)
+    const profile = igProfileRes.data;
+    console.log("✅ Instagram Profile:", profile);
+
+    // 5a. Get follower count (no period required)
     const followerCountRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
         metric: 'follower_count',
@@ -71,7 +76,7 @@ export default async function handler(req, res) {
       },
     });
 
-    // 5b. Get Instagram reach (requires period)
+    // 5b. Get reach (requires period)
     const reachRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
         metric: 'reach',
@@ -80,10 +85,10 @@ export default async function handler(req, res) {
       },
     });
 
-    // ✅ Return the profile + insights
+    // ✅ Return profile and stats
     res.status(200).json({
       message: 'Fetched Instagram profile and stats',
-      profile: igProfile.data,
+      profile,
       stats: {
         follower_count: followerCountRes.data,
         reach: reachRes.data,
@@ -91,7 +96,10 @@ export default async function handler(req, res) {
     });
 
   } catch (err) {
-    console.error('API Error:', err.response?.data || err.message);
-    res.status(500).send('Error fetching Instagram data');
+    console.error('❌ API Error:', err.response?.data || err.message);
+    res.status(500).json({
+      error: 'Error fetching Instagram data',
+      details: err.response?.data || err.message,
+    });
   }
 }
