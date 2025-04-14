@@ -1,9 +1,12 @@
-import { useRouter } from 'next/router';
+import { useLocation } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 
 export default function Profile() {
-  const router = useRouter();
-  const { data, error } = router.query;
+  const location = useLocation();
+  const queryParams = new URLSearchParams(location.search);
+  const data = queryParams.get('data');
+  const error = queryParams.get('error');
+
   const [profileData, setProfileData] = useState(null);
 
   useEffect(() => {
