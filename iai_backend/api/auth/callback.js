@@ -1,4 +1,4 @@
-//   iai_backend/api/auth/callback.js
+// iai_backend/api/auth/callback.js
 import axios from 'axios';
 
 export default async function handler(req, res) {
@@ -30,11 +30,10 @@ export default async function handler(req, res) {
     console.log("✅ Businesses:", businesses);
 
     if (!businesses.length) {
-      return res.status(404).json({ message: 'No businesses found for this user' });
+      return res.redirect(`/Profile?error=${encodeURIComponent('No businesses found')}`);
     }
 
     const businessId = businesses[0].id;
-    console.log("✅ Business ID:", businessId);
 
     // 3. Get owned pages under that business
     const ownedPagesRes = await axios.get(`https://graph.facebook.com/v19.0/${businessId}/owned_pages`, {
@@ -45,17 +44,17 @@ export default async function handler(req, res) {
     });
 
     const pages = ownedPagesRes.data.data;
-    console.log("✅ Owned Pages:", pages);
-
     const page = pages[0];
-    if (!page) return res.status(404).json({ message: 'No owned pages found under business' });
 
-    const pageId = page.id;
+    if (!page) {
+      return res.redirect(`/Profile?error=${encodeURIComponent('No pages found under business')}`);
+    }
+
     const igId = page.instagram_business_account?.id;
 
-    if (!igId) return res.status(404).json({ message: 'No Instagram business account connected to the Page' });
-
-    console.log("✅ Instagram Business Account ID:", igId);
+    if (!igId) {
+      return res.redirect(`/Profile?error=${encodeURIComponent('No Instagram account linked to this Page')}`);
+    }
 
     // 4. Get Instagram profile details
     const igProfileRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}`, {
@@ -65,10 +64,7 @@ export default async function handler(req, res) {
       },
     });
 
-    const profile = igProfileRes.data;
-    console.log("✅ Instagram Profile:", profile);
-
-    // 5a. Get follower count (no period required)
+    // 5a. Get follower count
     const followerCountRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
         metric: 'follower_count',
@@ -77,7 +73,7 @@ export default async function handler(req, res) {
       },
     });
 
-    // 5b. Get reach (requires period)
+    // 5b. Get reach
     const reachRes = await axios.get(`https://graph.facebook.com/v22.0/${igId}/insights`, {
       params: {
         metric: 'reach',
@@ -86,21 +82,20 @@ export default async function handler(req, res) {
       },
     });
 
-    // ✅ Return profile and stats
-    res.status(200).json({
-      message: 'Fetched Instagram profile and stats',
-      profile: igProfileRes.data, // contains username, profile_picture_url, etc.
+    const responsePayload = {
+      profile: igProfileRes.data,
       stats: {
         follower_count: followerCountRes.data,
         reach: reachRes.data,
       },
-    });
+    };
+
+    const encodedData = encodeURIComponent(JSON.stringify(responsePayload));
+    res.redirect(`/Profile?data=${encodedData}`);
 
   } catch (err) {
     console.error('❌ API Error:', err.response?.data || err.message);
-    res.status(500).json({
-      error: 'Error fetching Instagram data',
-      details: err.response?.data || err.message,
-    });
+    const errorMsg = encodeURIComponent(err.response?.data?.error?.message || err.message);
+    res.redirect(`/Profile?error=${errorMsg}`);
   }
 }
