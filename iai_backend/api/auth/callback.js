@@ -89,7 +89,7 @@ export default async function handler(req, res) {
     // ✅ Return profile and stats
     res.status(200).json({
       message: 'Fetched Instagram profile and stats',
-      profile,
+      profile: igProfileRes.data, // contains username, profile_picture_url, etc.
       stats: {
         follower_count: followerCountRes.data,
         reach: reachRes.data,

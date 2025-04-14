@@ -58,7 +58,6 @@ const Profile = () => {
       setCommentText('');
       setSelectedMedia(null);
       
-      // Refresh media data to show the new comment
       const mediaResponse = await axios.get(`http://localhost:5000/api/media?token=${token}`);
       setMedia(mediaResponse.data.data || []);
       
@@ -72,13 +71,21 @@ const Profile = () => {
   if (error) return <div className="alert alert-danger">{error}</div>;
   
   return (
-    <div>
+    <div className="container mt-4">
       {profile && (
-        <div className="card mb-4">
+        <div className="card mb-4 text-center">
           <div className="card-body">
-            <h2 className="card-title">{profile.username}'s Profile</h2>
-            <p className="card-text">Account Type: {profile.account_type}</p>
-            <p className="card-text">Media Count: {profile.media_count}</p>
+            {profile.profile_picture_url && (
+              <img
+                src={profile.profile_picture_url}
+                alt={`${profile.username}'s profile`}
+                className="rounded-circle mb-3"
+                style={{ width: 120, height: 120, objectFit: 'cover' }}
+              />
+            )}
+            <h2 className="card-title">@{profile.username}</h2>
+            <p className="card-text">Followers: {profile.followers_count}</p>
+            <p className="card-text">Following: {profile.follows_count}</p>
           </div>
         </div>
       )}
@@ -139,4 +146,4 @@ const Profile = () => {
   );
 };
 
-export default Profile
+export default Profile;
