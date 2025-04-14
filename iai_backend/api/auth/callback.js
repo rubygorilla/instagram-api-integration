@@ -91,7 +91,7 @@ export default async function handler(req, res) {
     };
 
     const encodedData = encodeURIComponent(JSON.stringify(responsePayload));
-    res.redirect(`https://instagram-api-integration.vercel.app/Profile?token=${encodedData}`);
+    res.redirect(`https://instagram-api-integration.vercel.app/Profile?data=${encodedData}`);
 
 
   } catch (err) {
