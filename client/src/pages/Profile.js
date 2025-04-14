@@ -13,6 +13,7 @@ export default function Profile() {
     if (data) {
       try {
         const parsed = JSON.parse(decodeURIComponent(data));
+        console.log("parsed data="+JSON.stringify(parsed, null, 2))
         setProfileData(parsed);
       } catch (err) {
         console.error("❌ Failed to parse profile data", err);
