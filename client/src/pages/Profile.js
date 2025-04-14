@@ -8,12 +8,12 @@ export default function Profile() {
   const error = queryParams.get('error');
 
   const [profileData, setProfileData] = useState(null);
+  const [filter, setFilter] = useState('ALL');
 
   useEffect(() => {
     if (data) {
       try {
         const parsed = JSON.parse(decodeURIComponent(data));
-        console.log("parsed data=", parsed);
         setProfileData(parsed);
       } catch (err) {
         console.error("❌ Failed to parse profile data", err);
@@ -22,106 +22,92 @@ export default function Profile() {
   }, [data]);
 
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
-  if (!profileData) return <p>Loading profile data...</p>;
 
-  const { profile, stats, media } = profileData;
-  const reachData = stats?.reach?.data?.[0]?.values || [];
+  const filteredMedia = profileData?.media?.filter((item) => {
+    if (filter === 'ALL') return true;
+    if (filter === 'REEL') return item.media_type === 'VIDEO' && item.caption?.includes('reel'); // optional reel detection
+    return item.media_type === filter;
+  });
 
   return (
-    <div style={{
-      padding: '30px',
-      fontFamily: 'Arial, sans-serif',
-      background: 'linear-gradient(to right, #fdfbfb, #ebedee)',
-      minHeight: '100vh'
-    }}>
-      <div style={{
-        maxWidth: '800px',
-        margin: '0 auto',
-        background: '#fff',
-        borderRadius: '16px',
-        padding: '20px',
-        boxShadow: '0 8px 24px rgba(0,0,0,0.1)'
-      }}>
-        {/* Profile Info */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
-          <img
-            src={profile.profile_picture_url}
-            alt="Profile"
-            style={{ width: 80, height: 80, borderRadius: '50%', border: '3px solid #FF4081' }}
-          />
-          <div>
-            <h2 style={{ margin: 0 }}>@{profile.username}</h2>
-            <p style={{ color: '#555', margin: 0 }}>Instagram Business Account</p>
+    <div style={{ padding: 20, maxWidth: '100%', background: '#f9f9f9' }}>
+      <h1>📸 Instagram Profile</h1>
+      {profileData ? (
+        <>
+          <div style={{ marginBottom: 20 }}>
+            <h2>@{profileData.profile.username}</h2>
+            <img src={profileData.profile.profile_picture_url} alt="Profile" width="100" style={{ borderRadius: '50%' }} />
+            <p>{profileData.profile.followers_count} followers • {profileData.profile.follows_count} following</p>
           </div>
-        </div>
 
-        {/* Stats */}
-        <div style={{
-          display: 'flex',
-          justifyContent: 'space-around',
-          marginTop: '20px',
-          textAlign: 'center'
-        }}>
-          <div>
-            <h3 style={{ margin: 0 }}>{profile.followers_count}</h3>
-            <p style={{ margin: 0, color: '#777' }}>Followers</p>
-          </div>
-          <div>
-            <h3 style={{ margin: 0 }}>{profile.follows_count}</h3>
-            <p style={{ margin: 0, color: '#777' }}>Following</p>
-          </div>
-        </div>
+          <h2 style={{ color: 'deeppink' }}>📊 Daily Reach</h2>
+          <ul>
+            {profileData.stats.reach.data.map((entry, i) => (
+              <li key={i}>
+                {new Date(entry.end_time).toLocaleDateString()} – {entry.values[0].value}
+              </li>
+            ))}
+          </ul>
 
-        {/* Daily Reach */}
-        {reachData.length > 0 && (
-          <div style={{ marginTop: '30px' }}>
-            <h4 style={{ color: '#FF4081', marginBottom: '10px' }}>📊 Daily Reach</h4>
-            <ul style={{ listStyle: 'none', padding: 0 }}>
-              {reachData.slice(0, 5).map((item, index) => (
-                <li key={index} style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  borderBottom: '1px solid #eee',
-                  padding: '4px 0'
-                }}>
-                  <span>{new Date(item.end_time).toLocaleDateString()}</span>
-                  <span>{item.value}</span>
-                </li>
+          <div style={{ marginTop: 30 }}>
+            <h2 style={{ color: 'deeppink' }}>📜 Recent Posts</h2>
+
+            {/* Filter Buttons */}
+            <div style={{ marginBottom: 20 }}>
+              {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
+                <button
+                  key={type}
+                  onClick={() => setFilter(type)}
+                  style={{
+                    marginRight: 10,
+                    padding: '6px 12px',
+                    backgroundColor: filter === type ? '#e91e63' : '#ddd',
+                    color: filter === type ? 'white' : 'black',
+                    border: 'none',
+                    borderRadius: 4,
+                    cursor: 'pointer'
+                  }}
+                >
+                  {type}
+                </button>
               ))}
-            </ul>
-          </div>
-        )}
+            </div>
 
-        {/* Recent Media Grid */}
-        {media?.length > 0 && (
-          <div style={{ marginTop: '40px' }}>
-            <h4 style={{ color: '#FF4081', marginBottom: '10px' }}>🎞️ Recent Posts</h4>
-            <div style={{
-              display: 'grid',
-              gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-              gap: '10px'
-            }}>
-              {media.slice(0, 12).map((item, index) => (
-                <div key={item.id || index} style={{ borderRadius: '8px', overflow: 'hidden' }}>
-                  {item.media_type === 'IMAGE' || item.media_type === 'CAROUSEL_ALBUM' ? (
-                    <img
-                      src={item.media_url}
-                      alt={item.caption || "Instagram post"}
-                      style={{ width: '100%', height: '120px', objectFit: 'cover' }}
-                    />
-                  ) : item.media_type === 'VIDEO' ? (
-                    <video
-                      src={item.media_url}
-                      controls
-                      style={{ width: '100%', height: '120px', objectFit: 'cover' }}
-                    />
-                  ) : null}
-                </div>
+            {/* Media Grid */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20 }}>
+              {filteredMedia?.map(media => (
+                <a
+                  key={media.id}
+                  href={media.permalink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    textDecoration: 'none',
+                    color: 'inherit',
+                    width: 'calc(33.33% - 20px)',
+                    background: '#fff',
+                    borderRadius: 8,
+                    overflow: 'hidden',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
+                  }}
+                >
+                  <img
+                    src={media.media_url}
+                    alt={media.caption || 'Instagram media'}
+                    style={{ width: '100%', height: 250, objectFit: 'cover' }}
+                  />
+                  <div style={{ padding: 10 }}>
+                    <p style={{ fontSize: 14, margin: 0, fontWeight: 500 }}>{media.caption?.slice(0, 100) || 'No caption'}</p>
+                    <p style={{ fontSize: 12, color: 'gray', margin: 0 }}>{new Date(media.timestamp).toLocaleDateString()}</p>
+                  </div>
+                </a>
               ))}
             </div>
           </div>
-        )}
-      </div>
+        </>
+      ) : (
+        <p>Loading profile data...</p>
+      )}
     </div>
   );
 }
