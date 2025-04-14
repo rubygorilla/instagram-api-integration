@@ -24,7 +24,7 @@ export default function Profile() {
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
   if (!profileData) return <p>Loading profile data...</p>;
 
-  const { profile, stats } = profileData;
+  const { profile, stats, media } = profileData;
   const reachData = stats?.reach?.data?.[0]?.values || [];
 
   return (
@@ -35,13 +35,14 @@ export default function Profile() {
       minHeight: '100vh'
     }}>
       <div style={{
-        maxWidth: '600px',
+        maxWidth: '800px',
         margin: '0 auto',
         background: '#fff',
         borderRadius: '16px',
         padding: '20px',
         boxShadow: '0 8px 24px rgba(0,0,0,0.1)'
       }}>
+        {/* Profile Info */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
           <img
             src={profile.profile_picture_url}
@@ -54,6 +55,7 @@ export default function Profile() {
           </div>
         </div>
 
+        {/* Stats */}
         <div style={{
           display: 'flex',
           justifyContent: 'space-around',
@@ -70,6 +72,7 @@ export default function Profile() {
           </div>
         </div>
 
+        {/* Daily Reach */}
         {reachData.length > 0 && (
           <div style={{ marginTop: '30px' }}>
             <h4 style={{ color: '#FF4081', marginBottom: '10px' }}>📊 Daily Reach</h4>
@@ -86,6 +89,36 @@ export default function Profile() {
                 </li>
               ))}
             </ul>
+          </div>
+        )}
+
+        {/* Recent Media Grid */}
+        {media?.length > 0 && (
+          <div style={{ marginTop: '40px' }}>
+            <h4 style={{ color: '#FF4081', marginBottom: '10px' }}>🎞️ Recent Posts</h4>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+              gap: '10px'
+            }}>
+              {media.slice(0, 12).map((item, index) => (
+                <div key={item.id || index} style={{ borderRadius: '8px', overflow: 'hidden' }}>
+                  {item.media_type === 'IMAGE' || item.media_type === 'CAROUSEL_ALBUM' ? (
+                    <img
+                      src={item.media_url}
+                      alt={item.caption || "Instagram post"}
+                      style={{ width: '100%', height: '120px', objectFit: 'cover' }}
+                    />
+                  ) : item.media_type === 'VIDEO' ? (
+                    <video
+                      src={item.media_url}
+                      controls
+                      style={{ width: '100%', height: '120px', objectFit: 'cover' }}
+                    />
+                  ) : null}
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>
