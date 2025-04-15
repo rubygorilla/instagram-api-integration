@@ -39,7 +39,7 @@ export default function Profile() {
 
     setSendingReply(prev => ({ ...prev, [mediaId]: true }));
     try {
-      const res = await fetch(`/api/comments/reply`, {
+      const res = await fetch(`https://iaibackend.vercel.app/api/comments/reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mediaId, commentId, message: text }),
