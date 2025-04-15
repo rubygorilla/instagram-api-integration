@@ -1,12 +1,11 @@
 // client/pages/store-profile.js
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
+import { useNavigate } from 'react-router-dom';
 
 export default function StoreProfile() {
-  const router = useRouter();
+  const navigate = useNavigate();
 
   useEffect(() => {
-    // Fix Facebook redirect quirk
     // Clean up Facebook hash fragment
     if (window.location.hash === '#_=_') {
       window.history.replaceState(null, '', window.location.pathname);
@@ -30,12 +29,12 @@ export default function StoreProfile() {
       document.cookie = 'insta_profile=; Max-Age=0; Path=/';
 
       // Redirect to profile page
-      router.replace('/Profile');
+      navigate('/profile');
     } catch (err) {
-      console.error('Failed to extract profile from cookie', err);
-      router.replace('/Profile?error=Cookie+error');
+      console.error('❌ Failed to extract profile from cookie', err);
+      navigate('/profile?error=Cookie+error');
     }
-  }, [router]);
+  }, [navigate]);
 
   return <p>Storing profile data...</p>;
 }
