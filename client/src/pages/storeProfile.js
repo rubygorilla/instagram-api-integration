@@ -1,32 +1,25 @@
-// client/pages/store-profile.js
+// pages/storeProfile.js
 import { useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useRouter } from 'next/router';
 
 export default function StoreProfile() {
   const router = useRouter();
 
   useEffect(() => {
-    // Remove Facebook's #_=_ quirk
-    if (window.location.hash === '#_=_') {
-      history.replaceState(null, '', window.location.pathname);
+    try {
+      const url = new URL(window.location.href);
+      const dataParam = url.searchParams.get('data');
+      if (!dataParam) throw new Error('Missing data parameter');
+
+      const decoded = JSON.parse(decodeURIComponent(dataParam));
+      sessionStorage.setItem('profileData', JSON.stringify(decoded));
+
+      router.replace('/Profile');
+    } catch (err) {
+      console.error('Failed to parse profile data', err);
+      router.replace('/Profile?error=Invalid+data');
     }
-
-    const { data } = router.query;
-
-    if (data) {
-      try {
-        const decoded = JSON.parse(decodeURIComponent(data));
-        sessionStorage.setItem('profileData', JSON.stringify(decoded));
-
-        router.replace('/Profile');
-      } catch (err) {
-        console.error("Failed to parse/store profile data", err);
-        router.replace('/Profile?error=Invalid+data');
-      }
-    } else {
-      router.replace('/Profile?error=Missing+data');
-    }
-  }, [router.query]);
+  }, [router]);
 
   return <p>Storing profile data...</p>;
 }
