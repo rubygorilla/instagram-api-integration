@@ -11,6 +11,7 @@ export default async function handler(req, res) {
 
   try {
     // 1. Exchange code for access token
+    console.log("process.env.FB_CLIENT_ID="+process.env.FB_CLIENT_ID);
     const tokenRes = await axios.get('https://graph.facebook.com/v19.0/oauth/access_token', {
       params: {
         client_id: process.env.FB_CLIENT_ID,
