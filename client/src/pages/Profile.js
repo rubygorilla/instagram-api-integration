@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
 
 export default function Profile() {
   const [profileData, setProfileData] = useState(null);
@@ -8,7 +7,6 @@ export default function Profile() {
   const [sendingReply, setSendingReply] = useState({});
   const [error, setError] = useState('');
   const token = sessionStorage.getItem('accessToken');
-  const router = useRouter();
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -30,9 +28,8 @@ export default function Profile() {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.removeItem('accessToken');
-    sessionStorage.removeItem('profileData');
-    router.push('/');
+    sessionStorage.clear();
+    window.location.href = '/';
   };
 
   const filteredMedia = profileData?.media?.filter((item) => {
@@ -155,8 +152,12 @@ export default function Profile() {
       `}</style>
 
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '1rem', paddingRight: '1rem' }}>
+        
         {/* Profile Header */}
-        <div className="text-center mb-5 text-white">
+        <div className="text-center mb-5 text-white position-relative">
+          <button onClick={handleLogout} className="btn btn-sm btn-light position-absolute top-0 end-0 mt-2 me-2">
+            🚪 Logout
+          </button>
           <h2 className="fw-bold">📸 Instagram Profile</h2>
           <h5>@{profileData.profile.username}</h5>
           <img
@@ -169,9 +170,6 @@ export default function Profile() {
           <p className="mt-2">
             {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
           </p>
-          <button onClick={handleLogout} className="btn btn-outline-light mt-2">
-            🚪 Logout
-          </button>
         </div>
 
         {/* Filter Buttons */}
