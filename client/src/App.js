@@ -9,16 +9,36 @@ import StoreProfile from './pages/storeProfile'; // ⬅️ Add this import
 function App() {
   return (
     <Router>
-      <div className="container mt-4">
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/profile" element={<Profile />} />
-          <Route path="/storeProfile" element={<StoreProfile />} />
-          <Route path="/storeProfile/*" element={<StoreProfile />} /> {/* 👈 Optional catch-all for #_=_ */}
-        </Routes>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} /> {/* No container */}
+        <Route
+          path="/profile"
+          element={
+            <div className="container mt-4">
+              <Profile />
+            </div>
+          }
+        />
+        <Route
+          path="/storeProfile"
+          element={
+            <div className="container mt-4">
+              <StoreProfile />
+            </div>
+          }
+        />
+        <Route
+          path="/storeProfile/*"
+          element={
+            <div className="container mt-4">
+              <StoreProfile />
+            </div>
+          }
+        />
+      </Routes>
     </Router>
   );
 }
+
 
 export default App;
