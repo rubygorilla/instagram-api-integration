@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 
 export default function Profile() {
+  const router = useRouter();
   const [profileData, setProfileData] = useState(null);
   const [filter, setFilter] = useState('ALL');
   const [replyText, setReplyText] = useState({});
@@ -26,6 +28,11 @@ export default function Profile() {
       setError('No profile data found. Please log in again.');
     }
   }, []);
+
+  const handleLogout = () => {
+    sessionStorage.clear();
+    router.push('/');
+  };
 
   const filteredMedia = profileData?.media?.filter((item) => {
     if (filter === 'ALL') return true;
@@ -103,7 +110,7 @@ export default function Profile() {
         .media-img {
           max-height: 100%;
           max-width: 100%;
-          object-fit: contain; /* This ensures no cropping */
+          object-fit: contain;
           border-top-left-radius: 1rem;
           border-top-right-radius: 1rem;
           display: block;
@@ -146,7 +153,7 @@ export default function Profile() {
         }
       `}</style>
 
-      <div className="container" style={{  maxWidth: '1200px',margin: '0 auto' ,paddingLeft: '1rem', paddingRight: '1rem',}}>
+      <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '1rem', paddingRight: '1rem' }}>
         {/* Profile Header */}
         <div className="text-center mb-5 text-white">
           <h2 className="fw-bold">📸 Instagram Profile</h2>
@@ -161,6 +168,15 @@ export default function Profile() {
           <p className="mt-2">
             {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
           </p>
+
+          {/* Logout Button */}
+          <button
+            onClick={handleLogout}
+            className="btn btn-outline-light btn-sm mt-3"
+            style={{ borderRadius: '20px' }}
+          >
+            🚪 Logout
+          </button>
         </div>
 
         {/* Filter Buttons */}
@@ -172,8 +188,8 @@ export default function Profile() {
               className={`btn btn-sm rounded-pill px-3 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
             >
               {type === 'IMAGE' ? '🖼️ Image' :
-               type === 'VIDEO' ? '🎬 Video' :
-               type === 'REEL' ? '🎞️ Reel' : '📁 All'}
+                type === 'VIDEO' ? '🎬 Video' :
+                  type === 'REEL' ? '🎞️ Reel' : '📁 All'}
             </button>
           ))}
         </div>
@@ -184,23 +200,23 @@ export default function Profile() {
             <div key={media.id} className="col-md-6 mb-4">
               <div className="card media-card h-100 border-0">
                 <a href={media.permalink} target="_blank" rel="noopener noreferrer">
-                <div className="media-img-wrapper">
-                  <img
-                    src={media.media_url}
-                    alt={media.caption || 'Instagram media'}
-                    className="media-img"
-                  />
-                </div>
+                  <div className="media-img-wrapper">
+                    <img
+                      src={media.media_url}
+                      alt={media.caption || 'Instagram media'}
+                      className="media-img"
+                    />
+                  </div>
                 </a>
                 <div className="card-body">
                   <span className={`badge mb-2 ${
                     media.media_type === 'IMAGE' ? 'badge-image' :
-                    media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? 'badge-reel' :
-                    'badge-video'
+                      media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? 'badge-reel' :
+                        'badge-video'
                   }`}>
                     {media.media_type === 'IMAGE' ? '🖼️ Image' :
-                     media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? '🎞️ Reel' :
-                     '🎬 Video'}
+                      media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? '🎞️ Reel' :
+                        '🎬 Video'}
                   </span>
                   <p className="card-text fw-semibold">{media.caption?.slice(0, 100) || 'No caption'}</p>
                   <p className="text-muted small">
