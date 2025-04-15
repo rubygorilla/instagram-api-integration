@@ -53,7 +53,7 @@ export default function Profile() {
       });
   
       const result = await res.json();
-      console.log("result from reply post="+result);
+      console.log("result from reply post="+JSON.stringify(result));
       if (result.success) {
         alert('✅ Reply sent!');
         setReplyText(prev => ({ ...prev, [commentId]: '' }));
