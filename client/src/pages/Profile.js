@@ -154,21 +154,43 @@ export default function Profile() {
           font-weight: 500;
         }
         .logout-btn {
-          padding: 0.6rem 1.2rem;
+          padding: 0.8rem 1.8rem;       /* Bigger padding for size */
+          font-size: 1.25rem;           /* Larger text */
+          font-weight: 600;
+          background: linear-gradient(135deg, #ff6a00,rgb(251, 249, 250));
+          color: #170b0b;
+          border: none;
+          border-radius: 2.5rem;        /* More rounded */
+          box-shadow: 0 4px 14px rgba(0, 0, 0, 0.25);
+          transition: transform 0.2s ease, box-shadow 0.3s ease;
+          z-index: 10;
+        }
+        .logout-btn:hover {
+          transform: scale(1.07);       /* Slight grow on hover */
+          box-shadow: 0 6px 20px rgba(0, 0, 0, 0.35);
+          background: linear-gradient(135deg, #ee0979, #ff6a00);
+        }
+        .filter-btn {
+          padding: 0.8rem 1.8rem;
           font-size: 1.1rem;
           font-weight: 600;
-          background: linear-gradient(135deg, #ff6a00, #ee0979);
+          background: linear-gradient(135deg, #ff9966, #ff5e62);
           color: #fff;
           border: none;
           border-radius: 2rem;
-          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-          transition: transform 0.2s ease, box-shadow 0.3s ease;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+          transition: transform 0.2s ease, box-shadow 0.3s ease, background 0.3s ease;
         }
-        .logout-btn:hover {
-          transform: scale(1.05);
-          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
-          background: linear-gradient(135deg, #ee0979, #ff6a00);
-        }
+      .filter-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+        background: linear-gradient(135deg, #ff5e62, #ff9966);
+      }
+      .filter-btn.active {
+        background: #fff;
+        color: #000;
+        border: 2px solid #ff5e62;
+      }
       `}</style>
 
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '1rem', paddingRight: '1rem' }}>
@@ -195,14 +217,14 @@ export default function Profile() {
         <div className="d-flex justify-content-center gap-2 flex-wrap mb-4">
           {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
             <button
-              key={type}
-              onClick={() => setFilter(type)}
-              className={`btn btn-sm rounded-pill px-3 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
-            >
-              {type === 'IMAGE' ? '🖼️ Image' :
-               type === 'VIDEO' ? '🎬 Video' :
-               type === 'REEL' ? '🎞️ Reel' : '📁 All'}
-            </button>
+            key={type}
+            onClick={() => setFilter(type)}
+            className={`filter-btn ${filter === type ? 'active' : ''}`}
+          >
+            {type === 'IMAGE' ? '🖼️ Image' :
+             type === 'VIDEO' ? '🎬 Video' :
+             type === 'REEL' ? '🎞️ Reel' : '📁 All'}
+          </button>
           ))}
         </div>
 
