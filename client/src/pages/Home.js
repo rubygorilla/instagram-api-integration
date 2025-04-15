@@ -1,7 +1,8 @@
-// client/pages/index.js
+
 import React from 'react';
 import Lottie from 'lottie-react';
 import waveAnimation from '../assets/Animation.json';
+import Image from 'next/image';
 
 export default function Home() {
   const handleLogin = () => {
@@ -20,84 +21,123 @@ export default function Home() {
   };
 
   return (
-    <div style={styles.container}>
-      {/* Floating Header */}
-      <div style={styles.header}>
-        <h2 style={styles.headerText}>Instagram Integration Project</h2>
-        <p style={styles.credit}>Project developed by - Aakash Pardeshi</p>
-      </div>
+    <div style={styles.outerContainer}>
+      <div style={styles.cardContainer}>
+        {/* Story Side */}
+        <div style={styles.storySide}>
+          <Image src="src/assets/pexels-photo-122383_1.jpeg" alt="Story" width={300} height={500} style={styles.storyImage} />
+          <div style={styles.storyCaption}>
+            <p style={styles.storyText}>Welcome to my World!</p>
+            <div style={styles.profileRow}>
+              <Image src="/profile-pic.jpgsrc/assets/pexels-photo-122383_2.jpeg" alt="Annette Black" width={30} height={30} style={styles.avatar} />
+              <span style={styles.username}>Annette Black</span>
+            </div>
+          </div>
+        </div>
 
-      {/* Animated Title and Lottie Animation */}
-      <div style={styles.content}>
-        <h1 style={styles.title}>📊 Instagram Insights Dashboard</h1>
-        <Lottie animationData={waveAnimation} style={styles.lottie} loop={true}/>
+        {/* Login Side */}
+        <div style={styles.loginSide}>
+          <h1 style={styles.igTitle}>Instagram</h1>
+          <div style={styles.checkmarkCircle}>✔</div>
+          <h2 style={styles.successText}>Login Success</h2>
+          <p style={styles.redirectText}>Redirecting...</p>
+          <button onClick={handleLogin} style={styles.loginButton}>Login with Instagram</button>
+        </div>
       </div>
-
-      {/* Login Button */}
-      <button onClick={handleLogin} style={styles.button}>
-        Login with Instagram
-      </button>
     </div>
   );
 }
 
 const styles = {
-  container: {
-    position: 'relative',
+  outerContainer: {
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
     height: '100vh',
-    background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+    background: 'linear-gradient(135deg, #833ab4, #fd1d1d, #fcb045)',
+  },
+  cardContainer: {
     display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
+    background: '#fff',
+    borderRadius: '20px',
     overflow: 'hidden',
-    padding: '20px',
+    boxShadow: '0 0 20px rgba(0,0,0,0.2)',
+    maxWidth: '900px',
+    width: '100%',
   },
-  header: {
+  storySide: {
+    flex: 1,
+    position: 'relative',
+  },
+  storyImage: {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+  },
+  storyCaption: {
     position: 'absolute',
-    top: '20px',
-    left: '20px',
-    color: '#fff',
-    textAlign: 'left',
+    bottom: '10px',
+    left: '10px',
+    color: 'white',
   },
-  headerText: {
-    margin: 0,
-    fontSize: '1.5rem',
-    fontWeight: 'bold',
-  },
-  credit: {
-    margin: 0,
+  storyText: {
     fontSize: '1rem',
+    fontWeight: '500',
+    marginBottom: '5px',
   },
-  content: {
+  profileRow: {
     display: 'flex',
     alignItems: 'center',
-    justifyContent: 'center',
-    flexDirection: 'column',
-    marginBottom: '40px',
+    gap: '8px',
   },
-  title: {
-    fontSize: '2.5rem',
+  avatar: {
+    borderRadius: '50%',
+  },
+  username: {
     fontWeight: 'bold',
-    color: '#fff',
-    animation: 'fadeIn 2s ease-in-out',
+    fontSize: '0.9rem',
+  },
+  loginSide: {
+    flex: 1,
+    backgroundColor: '#fff',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    padding: '40px',
+  },
+  igTitle: {
+    fontSize: '2rem',
+    fontFamily: 'cursive',
     marginBottom: '20px',
   },
-  lottie: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: 'auto',
-    zIndex: -1,
+  checkmarkCircle: {
+    fontSize: '3rem',
+    color: '#fd1d1d',
+    border: '3px solid #fd1d1d',
+    borderRadius: '50%',
+    width: '60px',
+    height: '60px',
+    textAlign: 'center',
+    lineHeight: '60px',
+    marginBottom: '10px',
   },
-  button: {
-    padding: '15px 30px',
-    fontSize: '1.2rem',
-    borderRadius: '8px',
+  successText: {
+    color: '#833ab4',
+    fontSize: '1.5rem',
+  },
+  redirectText: {
+    fontSize: '0.9rem',
+    color: '#999',
+    marginBottom: '20px',
+  },
+  loginButton: {
+    padding: '12px 20px',
+    fontSize: '1rem',
+    background: '#fcb045',
+    color: '#fff',
     border: 'none',
-    backgroundColor: '#fff',
-    color: '#764ba2',
+    borderRadius: '6px',
     cursor: 'pointer',
-    transition: 'background-color 0.3s ease',
   }
 };
