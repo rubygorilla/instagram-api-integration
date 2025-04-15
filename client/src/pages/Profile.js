@@ -9,7 +9,7 @@ export default function Profile() {
   const token = sessionStorage.getItem('accessToken');
 
   useEffect(() => {
-    document.body.style.margin = '0'; // Remove white border
+    document.body.style.margin = '0';
     document.body.style.padding = '0';
     document.body.style.overflowX = 'hidden';
 
@@ -72,47 +72,48 @@ export default function Profile() {
   if (!profileData) return <p>Loading profile data...</p>;
 
   return (
-    <div style={{ 
-      background: 'linear-gradient(135deg, #f58529, #dd2a7b, #8134af)', 
-      minHeight: '100vh', 
-      width: '100vw',
-      padding: '2rem 0', 
-      color: 'white',
-      overflowX: 'hidden',
-      margin: 0,
+    <div style={{
+      background: 'linear-gradient(135deg, #f58529, #dd2a7b, #8134af)',
+      minHeight: '100vh',
+      width: '100%',
+      padding: '2rem 0',
+      fontFamily: 'Inter, sans-serif',
     }}>
       <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
-        <div className="text-center mb-4">
-          <h2>📸 Instagram Profile</h2>
-          <h4 className="text-light">@{profileData.profile.username}</h4>
+        {/* Profile Header */}
+        <div className="text-center mb-5 text-white">
+          <h2 className="fw-bold">📸 Instagram Profile</h2>
+          <h5>@{profileData.profile.username}</h5>
           <img
             src={profileData.profile.profile_picture_url}
             alt="Profile"
-            className="rounded-circle mt-3 mb-2"
-            width="100"
+            className="rounded-circle shadow border border-2 border-white"
+            width="120"
+            style={{ marginTop: '10px' }}
           />
-          <p className="text-light">
+          <p className="mt-2">
             {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
           </p>
         </div>
 
-        <h3 className="mt-4" style={{ color: '#fff' }}>🧵 Recent Posts</h3>
-        <div className="mb-3">
+        {/* Filter Buttons */}
+        <div className="d-flex justify-content-center gap-2 flex-wrap mb-4">
           {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
             <button
               key={type}
               onClick={() => setFilter(type)}
-              className={`btn btn-sm me-2 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
+              className={`btn btn-sm rounded-pill px-3 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
             >
               {type}
             </button>
           ))}
         </div>
 
+        {/* Media Cards */}
         <div className="row">
           {filteredMedia?.map(media => (
             <div key={media.id} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm" style={{ backgroundColor: '#fff', color: '#000' }}>
+              <div className="card h-100 shadow-sm border-0" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
                 <a href={media.permalink} target="_blank" rel="noopener noreferrer">
                   <img
                     src={media.media_url}
@@ -122,8 +123,8 @@ export default function Profile() {
                   />
                 </a>
                 <div className="card-body">
-                  <p className="card-text"><strong>{media.caption?.slice(0, 100) || 'No caption'}</strong></p>
-                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+                  <p className="card-text fw-semibold">{media.caption?.slice(0, 100) || 'No caption'}</p>
+                  <p className="text-muted" style={{ fontSize: '0.85rem' }}>
                     {new Date(media.timestamp).toLocaleDateString()}
                   </p>
                   <h6 className="mt-3">💬 Comments</h6>
@@ -150,7 +151,7 @@ export default function Profile() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>No comments yet</p>
+                    <p className="text-muted" style={{ fontSize: '0.85rem' }}>No comments yet</p>
                   )}
                 </div>
               </div>
