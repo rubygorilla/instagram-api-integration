@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 export default function Profile() {
-  const router = useRouter();
   const [profileData, setProfileData] = useState(null);
   const [filter, setFilter] = useState('ALL');
   const [replyText, setReplyText] = useState({});
   const [sendingReply, setSendingReply] = useState({});
   const [error, setError] = useState('');
   const token = sessionStorage.getItem('accessToken');
+  const router = useRouter();
 
   useEffect(() => {
     document.body.style.margin = '0';
@@ -30,7 +30,8 @@ export default function Profile() {
   }, []);
 
   const handleLogout = () => {
-    sessionStorage.clear();
+    sessionStorage.removeItem('accessToken');
+    sessionStorage.removeItem('profileData');
     router.push('/');
   };
 
@@ -168,13 +169,7 @@ export default function Profile() {
           <p className="mt-2">
             {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
           </p>
-
-          {/* Logout Button */}
-          <button
-            onClick={handleLogout}
-            className="btn btn-outline-light btn-sm mt-3"
-            style={{ borderRadius: '20px' }}
-          >
+          <button onClick={handleLogout} className="btn btn-outline-light mt-2">
             🚪 Logout
           </button>
         </div>
@@ -188,8 +183,8 @@ export default function Profile() {
               className={`btn btn-sm rounded-pill px-3 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
             >
               {type === 'IMAGE' ? '🖼️ Image' :
-                type === 'VIDEO' ? '🎬 Video' :
-                  type === 'REEL' ? '🎞️ Reel' : '📁 All'}
+               type === 'VIDEO' ? '🎬 Video' :
+               type === 'REEL' ? '🎞️ Reel' : '📁 All'}
             </button>
           ))}
         </div>
@@ -211,12 +206,12 @@ export default function Profile() {
                 <div className="card-body">
                   <span className={`badge mb-2 ${
                     media.media_type === 'IMAGE' ? 'badge-image' :
-                      media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? 'badge-reel' :
-                        'badge-video'
+                    media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? 'badge-reel' :
+                    'badge-video'
                   }`}>
                     {media.media_type === 'IMAGE' ? '🖼️ Image' :
-                      media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? '🎞️ Reel' :
-                        '🎬 Video'}
+                     media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? '🎞️ Reel' :
+                     '🎬 Video'}
                   </span>
                   <p className="card-text fw-semibold">{media.caption?.slice(0, 100) || 'No caption'}</p>
                   <p className="text-muted small">
