@@ -1,4 +1,3 @@
-//profile.js changes
 import { useEffect, useState } from 'react';
 
 export default function Profile() {
@@ -30,17 +29,18 @@ export default function Profile() {
     return item.media_type === filter;
   });
 
-  const handleReplyChange = (mediaId, value) => {
-    setReplyText(prev => ({ ...prev, [mediaId]: value }));
+  // ✅ Now keyed by commentId instead of mediaId
+  const handleReplyChange = (commentId, value) => {
+    setReplyText(prev => ({ ...prev, [commentId]: value }));
   };
 
   const handleReplySubmit = async (mediaId, commentId) => {
-    const text = replyText[mediaId];
+    const text = replyText[commentId];
     if (!text?.trim()) return;
 
-    setSendingReply(prev => ({ ...prev, [mediaId]: true }));
+    setSendingReply(prev => ({ ...prev, [commentId]: true }));
     try {
-      const res = await fetch(`https://iaibackend.vercel.app/api/comments/reply`, { //fixed
+      const res = await fetch(`https://iaibackend.vercel.app/api/comments/reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mediaId, commentId, message: text }),
@@ -49,14 +49,14 @@ export default function Profile() {
       const result = await res.json();
       if (result.success) {
         alert('✅ Reply sent!');
-        setReplyText(prev => ({ ...prev, [mediaId]: '' }));
+        setReplyText(prev => ({ ...prev, [commentId]: '' }));
       } else {
         alert('❌ Failed to send reply');
       }
     } catch (err) {
       alert('❌ Error sending reply');
     } finally {
-      setSendingReply(prev => ({ ...prev, [mediaId]: false }));
+      setSendingReply(prev => ({ ...prev, [commentId]: false }));
     }
   };
 
@@ -144,7 +144,7 @@ export default function Profile() {
                 </div>
               </a>
 
-              {/* Comments */}
+              {/* 💬 Comments Section */}
               <div style={{ padding: '0 10px' }}>
                 <h4 style={{ fontSize: 13, marginBottom: 5 }}>💬 Comments</h4>
                 {media.comments?.length ? (
@@ -155,13 +155,13 @@ export default function Profile() {
                         <input
                           type="text"
                           placeholder="Reply..."
-                          value={replyText[media.id] || ''}
-                          onChange={e => handleReplyChange(media.id, e.target.value)}
+                          value={replyText[comment.id] || ''}
+                          onChange={e => handleReplyChange(comment.id, e.target.value)}
                           style={{ width: '70%', marginRight: 5, fontSize: 12 }}
                         />
                         <button
                           onClick={() => handleReplySubmit(media.id, comment.id)}
-                          disabled={sendingReply[media.id]}
+                          disabled={sendingReply[comment.id]}
                           style={{
                             padding: '4px 8px',
                             fontSize: 12,
@@ -172,7 +172,7 @@ export default function Profile() {
                             cursor: 'pointer',
                           }}
                         >
-                          {sendingReply[media.id] ? 'Replying...' : 'Reply'}
+                          {sendingReply[comment.id] ? 'Replying...' : 'Reply'}
                         </button>
                       </div>
                     </div>
