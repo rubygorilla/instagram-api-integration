@@ -1,4 +1,7 @@
 import axios from 'axios';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 export default async function handler(req, res) {
   const { code } = req.query;
@@ -10,9 +13,9 @@ export default async function handler(req, res) {
     // 1. Exchange code for access token
     const tokenRes = await axios.get('https://graph.facebook.com/v19.0/oauth/access_token', {
       params: {
-        client_id: "1359354858675859",
-        client_secret: "3856a375446d139ca3a3ff7509f27d17",
-        redirect_uri: "https://instagram-api-integration-server.vercel.app/api/auth/callback",
+        client_id: process.env.FB_CLIENT_ID,
+        client_secret: process.env.FB_CLIENT_SECRET,
+        redirect_uri: process.env.FB_REDIRECT_URI,
         code,
       },
     });
