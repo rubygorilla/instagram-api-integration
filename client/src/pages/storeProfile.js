@@ -1,17 +1,24 @@
-// src/pages/storeProfile.js
 import { useEffect } from 'react';
 
 export default function StoreProfile() {
   useEffect(() => {
-    try {
-      const url = new URL(window.location.href);
-      const dataParam = url.searchParams.get('data');
-      if (!dataParam) throw new Error('Missing data parameter');
+    const url = new URL(window.location.href);
+    const dataParam = url.searchParams.get('data');
 
+    if (!dataParam) {
+      console.error('Missing data parameter');
+      window.location.href = '/profile?error=Invalid+data';
+      return;
+    }
+
+    try {
       const decoded = JSON.parse(decodeURIComponent(dataParam));
       sessionStorage.setItem('profileData', JSON.stringify(decoded));
 
-      // Redirect to /profile (client-side)
+      // Clean the URL
+      window.history.replaceState({}, document.title, '/storeProfile');
+
+      // Redirect
       window.location.href = '/profile';
     } catch (err) {
       console.error('Failed to parse profile data', err);

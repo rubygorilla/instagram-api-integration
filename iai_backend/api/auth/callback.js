@@ -103,8 +103,10 @@ export default async function handler(req, res) {
 
     // Redirect to a frontend route that reads the cookie and stores it in sessionStorage
     const encodedData = encodeURIComponent(JSON.stringify(profilePayload));
+    console.log("Redirecting to:", `https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}`);
 
-    res.redirect('https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}');
+    res.redirect(`https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}`);
+
   } catch (err) {
     console.error('❌ API Error:', err.response?.data || err.message);
     const errorMsg = encodeURIComponent(err.response?.data?.error?.message || err.message);
