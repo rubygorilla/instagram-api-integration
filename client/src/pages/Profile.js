@@ -68,88 +68,88 @@ export default function Profile() {
   if (!profileData) return <p>Loading profile data...</p>;
 
   return (
-    <div className="container mt-4" style={{ maxWidth: '1000px' }}>
-      <div className="text-center mb-4">
-        <h2>📸 Instagram Profile</h2>
-        <h4 className="text-muted">@{profileData.profile.username}</h4>
-        <img
-          src={profileData.profile.profile_picture_url}
-          alt="Profile"
-          className="rounded-circle mt-3 mb-2"
-          width="100"
-        />
-        <p>{profileData.profile.followers_count} followers • {profileData.profile.follows_count} following</p>
-      </div>
+    <div style={{ 
+      background: 'linear-gradient(135deg, #f58529, #dd2a7b, #8134af)', 
+      minHeight: '100vh', 
+      padding: '2rem 0', 
+      color: 'white' 
+    }}>
+      <div className="container" style={{ maxWidth: '1000px' }}>
+        <div className="text-center mb-4">
+          <h2>📸 Instagram Profile</h2>
+          <h4 className="text-light">@{profileData.profile.username}</h4>
+          <img
+            src={profileData.profile.profile_picture_url}
+            alt="Profile"
+            className="rounded-circle mt-3 mb-2"
+            width="100"
+          />
+          <p className="text-light">
+            {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
+          </p>
+        </div>
 
-      {/* <h3 style={{ color: '#e91e63' }}>📊 Daily Reach</h3>
-      <ul>
-        {profileData.stats.reach.data.map((entry, i) => (
-          <li key={i}>
-            {new Date(entry.end_time).toLocaleDateString()} – {entry.values[0].value}
-          </li>
-        ))}
-      </ul> */}
+        <h3 className="mt-4" style={{ color: '#fff' }}>🧵 Recent Posts</h3>
+        <div className="mb-3">
+          {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
+            <button
+              key={type}
+              onClick={() => setFilter(type)}
+              className={`btn btn-sm me-2 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
+            >
+              {type}
+            </button>
+          ))}
+        </div>
 
-      <h3 className="mt-4" style={{ color: '#e91e63' }}>🧵 Recent Posts</h3>
-      <div className="mb-3">
-        {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
-          <button
-            key={type}
-            onClick={() => setFilter(type)}
-            className={`btn btn-sm me-2 ${filter === type ? 'btn-danger' : 'btn-outline-secondary'}`}
-          >
-            {type}
-          </button>
-        ))}
-      </div>
-
-      <div className="row">
-        {filteredMedia?.map(media => (
-          <div key={media.id} className="col-md-4 mb-4">
-            <div className="card h-100 shadow-sm">
-              <a href={media.permalink} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={media.media_url}
-                  alt={media.caption || 'Instagram media'}
-                  className="card-img-top"
-                  style={{ height: 250, objectFit: 'cover' }}
-                />
-              </a>
-              <div className="card-body">
-                <p className="card-text"><strong>{media.caption?.slice(0, 100) || 'No caption'}</strong></p>
-                <p className="text-muted" style={{ fontSize: '0.9rem' }}>
-                  {new Date(media.timestamp).toLocaleDateString()}
-                </p>
-                <h6 className="mt-3">💬 Comments</h6>
-                {media.comments?.length ? (
-                  media.comments.map(comment => (
-                    <div key={comment.id} className="mb-2">
-                      <div>{comment.text}</div>
-                      <div className="d-flex mt-1">
-                        <input
-                          type="text"
-                          className="form-control form-control-sm me-2"
-                          placeholder="Reply..."
-                          value={replyText[comment.id] || ''}
-                          onChange={e => handleReplyChange(comment.id, e.target.value)}
-                        />
-                        <button
-                          className="btn btn-sm btn-danger"
-                          onClick={() => handleReplySubmit(media.id, comment.id)}
-                          disabled={sendingReply[comment.id]}
-                        >
-                          {sendingReply[comment.id] ? 'Replying...' : 'Reply'}
-                        </button>
+        <div className="row">
+          {filteredMedia?.map(media => (
+            <div key={media.id} className="col-md-4 mb-4">
+              <div className="card h-100 shadow-sm" style={{ backgroundColor: '#fff', color: '#000' }}>
+                <a href={media.permalink} target="_blank" rel="noopener noreferrer">
+                  <img
+                    src={media.media_url}
+                    alt={media.caption || 'Instagram media'}
+                    className="card-img-top"
+                    style={{ height: 250, objectFit: 'cover' }}
+                  />
+                </a>
+                <div className="card-body">
+                  <p className="card-text"><strong>{media.caption?.slice(0, 100) || 'No caption'}</strong></p>
+                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+                    {new Date(media.timestamp).toLocaleDateString()}
+                  </p>
+                  <h6 className="mt-3">💬 Comments</h6>
+                  {media.comments?.length ? (
+                    media.comments.map(comment => (
+                      <div key={comment.id} className="mb-2">
+                        <div>{comment.text}</div>
+                        <div className="d-flex mt-1">
+                          <input
+                            type="text"
+                            className="form-control form-control-sm me-2"
+                            placeholder="Reply..."
+                            value={replyText[comment.id] || ''}
+                            onChange={e => handleReplyChange(comment.id, e.target.value)}
+                          />
+                          <button
+                            className="btn btn-sm btn-danger"
+                            onClick={() => handleReplySubmit(media.id, comment.id)}
+                            disabled={sendingReply[comment.id]}
+                          >
+                            {sendingReply[comment.id] ? 'Replying...' : 'Reply'}
+                          </button>
+                        </div>
                       </div>
-                    </div>
-                  ))
-                ) : (
-                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>No comments yet</p>
-                )}
+                    ))
+                  ) : (
+                    <p className="text-muted" style={{ fontSize: '0.9rem' }}>No comments yet</p>
+                  )}
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          ))}
+        </div>
       </div>
     </div>
   );
