@@ -1,7 +1,7 @@
 // client/pages/index.js
 import React from 'react';
 import Lottie from 'lottie-react';
-import waveAnimation from 'src/assets/Animation - sample.json';
+import waveAnimation from 'src/assets/Animation.json';
 
 export default function Home() {
   const handleLogin = () => {
