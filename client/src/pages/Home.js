@@ -1,7 +1,7 @@
 // client/pages/index.js
 import React from 'react';
 import Lottie from 'lottie-react';
-import waveAnimation from '/Users/aakashpardeshi/Documents/GitHub/instagram-api-integration/client/src/assets/Animation.json';
+import waveAnimation from '../assets/Animation.json';
 
 export default function Home() {
   const handleLogin = () => {
