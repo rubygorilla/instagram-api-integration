@@ -7,31 +7,19 @@ export default function Profile() {
   const [sendingReply, setSendingReply] = useState({});
   const [error, setError] = useState('');
 
-  // Load data from sessionStorage or fetch from backend
+  // Load data from sessionStorage
   useEffect(() => {
-    const cached = sessionStorage.getItem('insta_profile');
-    if (cached) {
+    const raw = sessionStorage.getItem('profileData');
+    if (raw) {
       try {
-        setProfileData(JSON.parse(cached));
+        setProfileData(JSON.parse(raw));
       } catch (e) {
         console.error('Invalid session data', e);
-        sessionStorage.removeItem('insta_profile');
+        sessionStorage.removeItem('profileData');
+        setError('Invalid session data');
       }
     } else {
-      fetch('/api/session/profile')
-        .then(res => res.json())
-        .then(data => {
-          if (data?.profile) {
-            setProfileData(data.profile);
-            sessionStorage.setItem('insta_profile', JSON.stringify(data.profile));
-          } else {
-            setError('Failed to load profile.');
-          }
-        })
-        .catch(err => {
-          console.error(err);
-          setError('Error fetching profile');
-        });
+      setError('No profile data found. Please log in again.');
     }
   }, []);
 
