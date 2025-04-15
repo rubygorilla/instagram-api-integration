@@ -30,7 +30,7 @@ export default function Home() {
       {/* Animated Title and Lottie Animation */}
       <div style={styles.content}>
         <h1 style={styles.title}>📊 Instagram Insights Dashboard</h1>
-        <Lottie animationData={waveAnimation} style={styles.lottie} />
+        <Lottie animationData={waveAnimation} style={styles.lottie} loop={true}/>
       </div>
 
       {/* Login Button */}
