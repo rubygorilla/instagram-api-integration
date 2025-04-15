@@ -9,6 +9,10 @@ export default function Profile() {
   const token = sessionStorage.getItem('accessToken');
 
   useEffect(() => {
+    document.body.style.margin = '0'; // Remove white border
+    document.body.style.padding = '0';
+    document.body.style.overflowX = 'hidden';
+
     const raw = sessionStorage.getItem('profileData');
     if (raw) {
       try {
@@ -71,10 +75,13 @@ export default function Profile() {
     <div style={{ 
       background: 'linear-gradient(135deg, #f58529, #dd2a7b, #8134af)', 
       minHeight: '100vh', 
+      width: '100vw',
       padding: '2rem 0', 
-      color: 'white' 
+      color: 'white',
+      overflowX: 'hidden',
+      margin: 0,
     }}>
-      <div className="container" style={{ maxWidth: '1000px' }}>
+      <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
         <div className="text-center mb-4">
           <h2>📸 Instagram Profile</h2>
           <h4 className="text-light">@{profileData.profile.username}</h4>
