@@ -1,8 +1,11 @@
-
 import React from 'react';
 import Lottie from 'lottie-react';
 import waveAnimation from '../assets/Animation.json';
 import Image from 'next/image';
+
+// ✅ Import images from assets
+import storyImage from '../assets/pexels-photo-122383_1.jpeg';
+import avatarImage from '../assets/pexels-photo-122383_2.jpeg';
 
 export default function Home() {
   const handleLogin = () => {
@@ -25,11 +28,11 @@ export default function Home() {
       <div style={styles.cardContainer}>
         {/* Story Side */}
         <div style={styles.storySide}>
-          <Image src="src/assets/pexels-photo-122383_1.jpeg" alt="Story" width={300} height={500} style={styles.storyImage} />
+          <Image src={storyImage} alt="Story" width={300} height={500} style={styles.storyImage} />
           <div style={styles.storyCaption}>
             <p style={styles.storyText}>Welcome to my World!</p>
             <div style={styles.profileRow}>
-              <Image src="/profile-pic.jpgsrc/assets/pexels-photo-122383_2.jpeg" alt="Annette Black" width={30} height={30} style={styles.avatar} />
+              <Image src={avatarImage} alt="Annette Black" width={30} height={30} style={styles.avatar} />
               <span style={styles.username}>Annette Black</span>
             </div>
           </div>
@@ -38,6 +41,7 @@ export default function Home() {
         {/* Login Side */}
         <div style={styles.loginSide}>
           <h1 style={styles.igTitle}>Instagram</h1>
+          <Lottie animationData={waveAnimation} style={{ width: 150, height: 150, marginBottom: 10 }} loop={true} />
           <div style={styles.checkmarkCircle}>✔</div>
           <h2 style={styles.successText}>Login Success</h2>
           <p style={styles.redirectText}>Redirecting...</p>
@@ -73,6 +77,8 @@ const styles = {
     width: '100%',
     height: '100%',
     objectFit: 'cover',
+    borderTopLeftRadius: '20px',
+    borderBottomLeftRadius: '20px',
   },
   storyCaption: {
     position: 'absolute',
@@ -109,22 +115,22 @@ const styles = {
   igTitle: {
     fontSize: '2rem',
     fontFamily: 'cursive',
-    marginBottom: '20px',
+    marginBottom: '10px',
   },
   checkmarkCircle: {
-    fontSize: '3rem',
+    fontSize: '2rem',
     color: '#fd1d1d',
     border: '3px solid #fd1d1d',
     borderRadius: '50%',
-    width: '60px',
-    height: '60px',
+    width: '50px',
+    height: '50px',
     textAlign: 'center',
-    lineHeight: '60px',
+    lineHeight: '44px',
     marginBottom: '10px',
   },
   successText: {
     color: '#833ab4',
-    fontSize: '1.5rem',
+    fontSize: '1.2rem',
   },
   redirectText: {
     fontSize: '0.9rem',
