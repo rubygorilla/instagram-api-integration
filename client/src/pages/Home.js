@@ -20,9 +20,48 @@ export default function Home() {
   };
 
   return (
-    <div style={{ padding: 30, textAlign: "center" }}>
-      <h1>📊 Instagram Insights Dashboard</h1>
-      <button onClick={handleLogin} style={{ padding: 10, fontSize: 18 }}>
+    <div
+      style={{
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        background: 'linear-gradient(135deg, #667eea, #764ba2)',
+        color: 'white',
+        fontFamily: 'Segoe UI, sans-serif',
+        padding: 20,
+        textAlign: 'center',
+      }}
+    >
+      {/* Header */}
+      <header style={{ position: 'absolute', top: 20, left: 20 }}>
+        <h3 style={{ margin: 0 }}>💡 Instagram Integration Project</h3>
+        <p style={{ margin: 0, fontSize: 14 }}>Project developed by - <strong>Aakash</strong></p>
+      </header>
+
+      {/* Main Title */}
+      <h1 style={{ fontSize: '3rem', marginBottom: 20 }}>
+        📊 Instagram Insights Dashboard
+      </h1>
+
+      {/* Login Button */}
+      <button
+        onClick={handleLogin}
+        style={{
+          padding: '12px 24px',
+          fontSize: '1.1rem',
+          backgroundColor: 'white',
+          color: '#764ba2',
+          border: 'none',
+          borderRadius: 8,
+          cursor: 'pointer',
+          boxShadow: '0px 4px 15px rgba(0, 0, 0, 0.2)',
+          transition: 'transform 0.2s ease',
+        }}
+        onMouseEnter={(e) => (e.target.style.transform = 'scale(1.05)')}
+        onMouseLeave={(e) => (e.target.style.transform = 'scale(1)')}
+      >
         Login with Instagram
       </button>
     </div>
