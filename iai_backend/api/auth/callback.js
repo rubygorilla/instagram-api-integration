@@ -86,22 +86,43 @@ export default async function handler(req, res) {
       },
     });
 
+    const media = mediaRes.data.data;
+
+    // 7. Fetch comments for each media item (limit to first 5 to avoid rate limit)
+    const mediaWithComments = await Promise.all(
+      media.slice(0, 5).map(async (item) => {
+        try {
+          const commentsRes = await axios.get(`https://graph.facebook.com/v19.0/${item.id}/comments`, {
+            params: {
+              fields: 'id,text,username,timestamp',
+              access_token: accessToken,
+            },
+          });
+          return {
+            ...item,
+            comments: commentsRes.data.data || [],
+          };
+        } catch (error) {
+          console.warn(`⚠️ Failed to fetch comments for media ${item.id}:`, error.response?.data || error.message);
+          return {
+            ...item,
+            comments: [],
+          };
+        }
+      })
+    );
+
+    // 8. Prepare payload
     const profilePayload = {
       profile: igProfileRes.data,
       stats: {
         follower_count: followerCountRes.data,
         reach: reachRes.data,
       },
-      media: mediaRes.data.data,
+      media: mediaWithComments,
     };
 
-    // Store in HTTP-only secure cookie
-    // const encodedData = encodeURIComponent(JSON.stringify(profilePayload));
-    // res.setHeader('Set-Cookie', [
-    //   `insta_profile=${encodedData}; Path=/; Secure; SameSite=None; Max-Age=300`,
-    // ]);    
-
-    // Redirect to a frontend route that reads the cookie and stores it in sessionStorage
+    // 9. Send to frontend
     const encodedData = encodeURIComponent(JSON.stringify(profilePayload));
     console.log("Redirecting to:", `https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}`);
 
