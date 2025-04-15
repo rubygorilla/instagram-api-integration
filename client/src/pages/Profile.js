@@ -149,29 +149,48 @@ export default function Profile() {
         input.form-control-sm {
           border-radius: 0.5rem;
         }
+        .follow-info {
+          font-size: 1.25rem;
+          font-weight: 500;
+        }
+        .logout-btn {
+          padding: 0.6rem 1.2rem;
+          font-size: 1.1rem;
+          font-weight: 600;
+          background: linear-gradient(135deg, #ff6a00, #ee0979);
+          color: #fff;
+          border: none;
+          border-radius: 2rem;
+          box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+          transition: transform 0.2s ease, box-shadow 0.3s ease;
+        }
+        .logout-btn:hover {
+          transform: scale(1.05);
+          box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+          background: linear-gradient(135deg, #ee0979, #ff6a00);
+        }
       `}</style>
 
       <div className="container" style={{ maxWidth: '1200px', margin: '0 auto', paddingLeft: '1rem', paddingRight: '1rem' }}>
         
         {/* Profile Header */}
         <div className="text-center mb-5 text-white position-relative">
-          <button onClick={handleLogout} className="btn btn-sm btn-light position-absolute top-0 end-0 mt-2 me-2">
-            🚪 Logout
-          </button>
+        <button onClick={handleLogout} className="logout-btn position-absolute top-0 end-0 mt-3 me-3">
+          🚪 Logout
+        </button>
           <h2 className="fw-bold">📸 Instagram Profile</h2>
           <h5>@{profileData.profile.username}</h5>
           <img
             src={profileData.profile.profile_picture_url}
             alt="Profile"
             className="rounded-circle shadow border border-2 border-white"
-            width="120"
+            width="300"
             style={{ marginTop: '10px' }}
           />
-          <p className="mt-2">
+          <p className="mt-2 follow-info">
             {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
           </p>
         </div>
-
         {/* Filter Buttons */}
         <div className="d-flex justify-content-center gap-2 flex-wrap mb-4">
           {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
