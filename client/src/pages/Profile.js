@@ -53,7 +53,7 @@ export default function Profile() {
 
     setSendingReply(prev => ({ ...prev, [commentId]: true }));
     try {
-      const res = await fetch(`https://iaibackend.vercel.app/api/comments/reply`, {
+      const res = await fetch(`https://instagram-api-integration-server.vercel.app/api/comments/reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ commentId, message: text, accessToken: token }),

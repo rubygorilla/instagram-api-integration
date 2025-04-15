@@ -6,7 +6,7 @@ const handleReply = async (commentId, message) => {
       return;
     }
   
-    const res = await fetch('https://iaibackend.vercel.app/api/comments/reply', {
+    const res = await fetch('https://instagram-api-integration-server.vercel.app/api/comments/reply', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
