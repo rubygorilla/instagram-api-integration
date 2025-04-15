@@ -1,4 +1,3 @@
-// client/pages/index.js
 import React from 'react';
 
 export default function Home() {
@@ -18,37 +17,45 @@ export default function Home() {
   };
 
   return (
-    <div style={styles.container}>
-      {/* Top Left Header */}
-      <div style={styles.header}>
-        <h2 style={styles.headerText}>Instagram Integration Project</h2>
-        <p style={styles.credit}>Project developed by - Aakash Pardeshi</p>
-      </div>
+    <div style={styles.pageWrapper}>
+      <div style={styles.container}>
+        {/* Floating Header */}
+        <div style={styles.header}>
+          <h2 style={styles.headerText}>Instagram Integration Project</h2>
+          <p style={styles.credit}>Project developed by - Aakash Pardeshi</p>
+        </div>
 
-      {/* Center Content */}
-      <div style={styles.centerContent}>
-        <h1 style={styles.title}>
-          📊 Instagram Insights Dashboard
-        </h1>
-        <button onClick={handleLogin} style={styles.button}>
-          Login with Instagram
-        </button>
+        {/* Center Content */}
+        <div style={styles.centerContent}>
+          <h1 style={styles.title}>
+            📊 Instagram Insights Dashboard
+          </h1>
+          <button onClick={handleLogin} style={styles.button}>
+            Login with Instagram
+          </button>
+        </div>
       </div>
     </div>
   );
 }
 
 const styles = {
-  container: {
-    height: '100vh',
+  pageWrapper: {
+    margin: 0,
+    padding: 0,
+    overflow: 'hidden',
     width: '100vw',
-    background: 'linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4)', // Instagram-like gradient
+    height: '100vh',
+  },
+  container: {
+    height: '100%',
+    width: '100%',
+    background: 'linear-gradient(135deg, #f58529, #dd2a7b, #8134af, #515bd4)',
     backgroundSize: '400% 400%',
     animation: 'gradientBG 15s ease infinite',
     display: 'flex',
     flexDirection: 'column',
     position: 'relative',
-    overflow: 'hidden',
   },
   header: {
     position: 'absolute',
@@ -89,7 +96,7 @@ const styles = {
   }
 };
 
-// Add this CSS somewhere in your global CSS (like styles/globals.css)
+// Global gradient animation
 const globalCSS = `
 @keyframes gradientBG {
   0% { background-position: 0% 50%; }
