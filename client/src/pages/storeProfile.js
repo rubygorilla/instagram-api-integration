@@ -1,10 +1,7 @@
-// pages/storeProfile.js
+// src/pages/storeProfile.js
 import { useEffect } from 'react';
-import { useRouter } from 'next/router';
 
 export default function StoreProfile() {
-  const router = useRouter();
-
   useEffect(() => {
     try {
       const url = new URL(window.location.href);
@@ -14,12 +11,13 @@ export default function StoreProfile() {
       const decoded = JSON.parse(decodeURIComponent(dataParam));
       sessionStorage.setItem('profileData', JSON.stringify(decoded));
 
-      router.replace('/Profile');
+      // Redirect to /profile (client-side)
+      window.location.href = '/profile';
     } catch (err) {
       console.error('Failed to parse profile data', err);
-      router.replace('/Profile?error=Invalid+data');
+      window.location.href = '/profile?error=Invalid+data';
     }
-  }, [router]);
+  }, []);
 
   return <p>Storing profile data...</p>;
 }
