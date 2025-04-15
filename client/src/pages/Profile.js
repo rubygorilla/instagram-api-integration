@@ -91,14 +91,18 @@ export default function Profile() {
           transform: translateY(-8px);
           box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
         }
+        .media-img-wrapper {
+          height: 300px;
+          overflow: hidden;
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
+        }
         .media-img {
           width: 100%;
-          height: auto;
-          object-fit: contain; /* Show full image */
-          max-height: 300px;
-          transition: transform 0.3s ease;
+          height: 100%;
+          object-fit: cover; /* This makes it fill and crop correctly */
           display: block;
-          margin: 0 auto;
+          transition: transform 0.3s ease;
         }
         .media-img:hover {
           transform: scale(1.10);
@@ -176,11 +180,11 @@ export default function Profile() {
             <div key={media.id} className="col-md-6 mb-4">
               <div className="card media-card h-100 border-0">
                 <a href={media.permalink} target="_blank" rel="noopener noreferrer">
-                <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <div className="media-img-wrapper">
                   <img
                     src={media.media_url}
                     alt={media.caption || 'Instagram media'}
-                    className="card-img-top media-img"
+                    className="media-img"
                   />
                 </div>
                 </a>
