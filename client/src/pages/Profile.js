@@ -17,22 +17,31 @@ export default function Profile() {
       try {
         const parsed = JSON.parse(decodeURIComponent(data));
         setProfileData(parsed);
-
-        // Fetch comments for each media item
-        parsed.media.forEach(media => {
-          fetch(`https://graph.facebook.com/v19.0/${media.id}/comments?access_token=${parsed.token}`)
-            .then(res => res.json())
-            .then(result => {
-              setCommentsMap(prev => ({ ...prev, [media.id]: result.data || [] }));
-            })
-            .catch(err => console.error("Failed to fetch comments", err));
-        });
-
       } catch (err) {
         console.error("❌ Failed to parse profile data", err);
       }
     }
   }, [data]);
+
+  useEffect(() => {
+    const fetchComments = async () => {
+      if (profileData?.media && profileData.token) {
+        const commentsByMedia = {};
+        for (const media of profileData.media) {
+          try {
+            const res = await fetch(`https://graph.facebook.com/v19.0/${media.id}/comments?access_token=${profileData.token}`);
+            const data = await res.json();
+            commentsByMedia[media.id] = data?.data || [];
+          } catch (err) {
+            console.error(`❌ Failed to fetch comments for media ${media.id}`, err);
+          }
+        }
+        setCommentsMap(commentsByMedia);
+      }
+    };
+
+    fetchComments();
+  }, [profileData]);
 
   const handleReplySubmit = async (commentId, token) => {
     const message = replyMap[commentId];
@@ -42,16 +51,18 @@ export default function Profile() {
       const res = await fetch(`https://graph.facebook.com/v19.0/${commentId}/replies`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          message,
-          access_token: profileData.token
-        })
+        body: JSON.stringify({ message, access_token: token }),
       });
-      const json = await res.json();
-      console.log("✅ Reply sent:", json);
-      setReplyMap(prev => ({ ...prev, [commentId]: '' }));
+
+      if (res.ok) {
+        alert("Reply posted successfully!");
+        setReplyMap(prev => ({ ...prev, [commentId]: '' }));
+      } else {
+        const error = await res.json();
+        alert(`Error: ${error.error?.message}`);
+      }
     } catch (err) {
-      console.error("❌ Failed to send reply", err);
+      console.error('❌ Failed to post reply:', err);
     }
   };
 
@@ -113,53 +124,61 @@ export default function Profile() {
                 <div
                   key={media.id}
                   style={{
+                    textDecoration: 'none',
+                    color: 'inherit',
                     width: 'calc(33.33% - 20px)',
                     background: '#fff',
                     borderRadius: 8,
                     overflow: 'hidden',
-                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                    paddingBottom: 10
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
                   }}
                 >
                   <a
                     href={media.permalink}
                     target="_blank"
                     rel="noopener noreferrer"
-                    style={{ textDecoration: 'none', color: 'inherit' }}
                   >
                     <img
                       src={media.media_url}
                       alt={media.caption || 'Instagram media'}
                       style={{ width: '100%', height: 250, objectFit: 'cover' }}
                     />
-                    <div style={{ padding: 10 }}>
-                      <p style={{ fontSize: 14, margin: 0, fontWeight: 500 }}>{media.caption?.slice(0, 100) || 'No caption'}</p>
-                      <p style={{ fontSize: 12, color: 'gray', margin: 0 }}>{new Date(media.timestamp).toLocaleDateString()}</p>
-                    </div>
                   </a>
+                  <div style={{ padding: 10 }}>
+                    <p style={{ fontSize: 14, margin: 0, fontWeight: 500 }}>{media.caption?.slice(0, 100) || 'No caption'}</p>
+                    <p style={{ fontSize: 12, color: 'gray', margin: 0 }}>{new Date(media.timestamp).toLocaleDateString()}</p>
+                  </div>
 
                   {/* Comments */}
-                  <div style={{ padding: '0 10px' }}>
-                    {commentsMap[media.id]?.map(comment => (
-                      <div key={comment.id} style={{ borderTop: '1px solid #eee', padding: '6px 0' }}>
+                  <div style={{ padding: '0 10px 10px', background: '#fafafa', borderTop: '1px solid #eee' }}>
+                    {commentsMap[media.id]?.length ? commentsMap[media.id].map(comment => (
+                      <div key={comment.id} style={{ padding: '6px 0' }}>
                         <strong>{comment.username}:</strong> {comment.text}
-                        <div style={{ marginTop: 4 }}>
+                        <div style={{ display: 'flex', marginTop: 4 }}>
                           <input
                             type="text"
                             placeholder="Reply..."
                             value={replyMap[comment.id] || ''}
                             onChange={(e) => setReplyMap(prev => ({ ...prev, [comment.id]: e.target.value }))}
-                            style={{ width: '80%', padding: 4 }}
+                            style={{ flex: 1, padding: 6, border: '1px solid #ccc', borderRadius: 4 }}
                           />
                           <button
                             onClick={() => handleReplySubmit(comment.id, profileData.token)}
-                            style={{ marginLeft: 5, padding: '4px 10px' }}
+                            style={{
+                              marginLeft: 6,
+                              padding: '6px 12px',
+                              background: '#e91e63',
+                              color: 'white',
+                              border: 'none',
+                              borderRadius: 4,
+                              cursor: 'pointer'
+                            }}
                           >
                             Send
                           </button>
                         </div>
                       </div>
-                    ))}
+                    )) : <p style={{ color: '#888', fontSize: 13 }}>No comments yet</p>}
                   </div>
                 </div>
               ))}
