@@ -8,7 +8,6 @@ export default function Profile() {
   const [error, setError] = useState('');
   const token = sessionStorage.getItem('accessToken');
 
-  // Load data from sessionStorage
   useEffect(() => {
     const raw = sessionStorage.getItem('profileData');
     if (raw) {
@@ -30,23 +29,19 @@ export default function Profile() {
     return item.media_type === filter;
   });
 
-  // ✅ Now keyed by commentId instead of mediaId
   const handleReplyChange = (commentId, value) => {
     setReplyText(prev => ({ ...prev, [commentId]: value }));
   };
 
   const handleReplySubmit = async (mediaId, commentId) => {
-    console.log("mediaId = "+mediaId);
-    console.log("commentId = "+commentId);
-
     const text = replyText[commentId];
     if (!text?.trim()) return;
-  
+
     if (!token) {
       alert('Access token missing. Please log in again.');
       return;
     }
-  
+
     setSendingReply(prev => ({ ...prev, [commentId]: true }));
     try {
       const res = await fetch(`https://iaibackend.vercel.app/api/comments/reply`, {
@@ -54,9 +49,8 @@ export default function Profile() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ commentId, message: text, accessToken: token }),
       });
-  
+
       const result = await res.json();
-      console.log("result from reply post="+JSON.stringify(result));
       if (result.success) {
         alert('✅ Reply sent!');
         setReplyText(prev => ({ ...prev, [commentId]: '' }));
@@ -74,22 +68,20 @@ export default function Profile() {
   if (!profileData) return <p>Loading profile data...</p>;
 
   return (
-    <div style={{ padding: 20, maxWidth: '100%', background: '#f9f9f9' }}>
-      <h1>📸 Instagram Profile</h1>
-      <div style={{ marginBottom: 20 }}>
-        <h2>@{profileData.profile.username}</h2>
+    <div className="container mt-4" style={{ maxWidth: '1000px' }}>
+      <div className="text-center mb-4">
+        <h2>📸 Instagram Profile</h2>
+        <h4 className="text-muted">@{profileData.profile.username}</h4>
         <img
           src={profileData.profile.profile_picture_url}
           alt="Profile"
+          className="rounded-circle mt-3 mb-2"
           width="100"
-          style={{ borderRadius: '50%' }}
         />
-        <p>
-          {profileData.profile.followers_count} followers • {profileData.profile.follows_count} following
-        </p>
+        <p>{profileData.profile.followers_count} followers • {profileData.profile.follows_count} following</p>
       </div>
 
-      <h2 style={{ color: 'deeppink' }}>📊 Daily Reach</h2>
+      <h3 style={{ color: '#e91e63' }}>📊 Daily Reach</h3>
       <ul>
         {profileData.stats.reach.data.map((entry, i) => (
           <li key={i}>
@@ -98,89 +90,53 @@ export default function Profile() {
         ))}
       </ul>
 
-      <div style={{ marginTop: 30 }}>
-        <h2 style={{ color: 'deeppink' }}>📜 Recent Posts</h2>
-        <div style={{ marginBottom: 20 }}>
-          {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
-            <button
-              key={type}
-              onClick={() => setFilter(type)}
-              style={{
-                marginRight: 10,
-                padding: '6px 12px',
-                backgroundColor: filter === type ? '#e91e63' : '#ddd',
-                color: filter === type ? 'white' : 'black',
-                border: 'none',
-                borderRadius: 4,
-                cursor: 'pointer',
-              }}
-            >
-              {type}
-            </button>
-          ))}
-        </div>
+      <h3 className="mt-4" style={{ color: '#e91e63' }}>🧵 Recent Posts</h3>
+      <div className="mb-3">
+        {['ALL', 'IMAGE', 'VIDEO', 'REEL'].map(type => (
+          <button
+            key={type}
+            onClick={() => setFilter(type)}
+            className={`btn btn-sm me-2 ${filter === type ? 'btn-danger' : 'btn-outline-secondary'}`}
+          >
+            {type}
+          </button>
+        ))}
+      </div>
 
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 20 }}>
-          {filteredMedia?.map(media => (
-            <div
-              key={media.id}
-              style={{
-                width: 'calc(33.33% - 20px)',
-                background: '#fff',
-                borderRadius: 8,
-                overflow: 'hidden',
-                boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
-                paddingBottom: 10,
-              }}
-            >
-              <a
-                href={media.permalink}
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{ textDecoration: 'none', color: 'inherit' }}
-              >
+      <div className="row">
+        {filteredMedia?.map(media => (
+          <div key={media.id} className="col-md-4 mb-4">
+            <div className="card h-100 shadow-sm">
+              <a href={media.permalink} target="_blank" rel="noopener noreferrer">
                 <img
                   src={media.media_url}
                   alt={media.caption || 'Instagram media'}
-                  style={{ width: '100%', height: 250, objectFit: 'cover' }}
+                  className="card-img-top"
+                  style={{ height: 250, objectFit: 'cover' }}
                 />
-                <div style={{ padding: 10 }}>
-                  <p style={{ fontSize: 14, margin: 0, fontWeight: 500 }}>
-                    {media.caption?.slice(0, 100) || 'No caption'}
-                  </p>
-                  <p style={{ fontSize: 12, color: 'gray', margin: 0 }}>
-                    {new Date(media.timestamp).toLocaleDateString()}
-                  </p>
-                </div>
               </a>
-
-              {/* 💬 Comments Section */}
-              <div style={{ padding: '0 10px' }}>
-                <h4 style={{ fontSize: 13, marginBottom: 5 }}>💬 Comments</h4>
+              <div className="card-body">
+                <p className="card-text"><strong>{media.caption?.slice(0, 100) || 'No caption'}</strong></p>
+                <p className="text-muted" style={{ fontSize: '0.9rem' }}>
+                  {new Date(media.timestamp).toLocaleDateString()}
+                </p>
+                <h6 className="mt-3">💬 Comments</h6>
                 {media.comments?.length ? (
                   media.comments.map(comment => (
-                    <div key={comment.id} style={{ marginBottom: 8 }}>
-                      <div style={{ fontSize: 13 }}>{comment.text}</div>
-                      <div style={{ marginTop: 5 }}>
+                    <div key={comment.id} className="mb-2">
+                      <div>{comment.text}</div>
+                      <div className="d-flex mt-1">
                         <input
                           type="text"
+                          className="form-control form-control-sm me-2"
                           placeholder="Reply..."
                           value={replyText[comment.id] || ''}
                           onChange={e => handleReplyChange(comment.id, e.target.value)}
-                          style={{ width: '70%', marginRight: 5, fontSize: 12 }}
                         />
                         <button
+                          className="btn btn-sm btn-danger"
                           onClick={() => handleReplySubmit(media.id, comment.id)}
                           disabled={sendingReply[comment.id]}
-                          style={{
-                            padding: '4px 8px',
-                            fontSize: 12,
-                            backgroundColor: '#e91e63',
-                            color: 'white',
-                            border: 'none',
-                            borderRadius: 4,
-                            cursor: 'pointer',
-                          }}
                         >
                           {sendingReply[comment.id] ? 'Replying...' : 'Reply'}
                         </button>
@@ -188,12 +144,12 @@ export default function Profile() {
                     </div>
                   ))
                 ) : (
-                  <p style={{ fontSize: 12, color: 'gray' }}>No comments yet</p>
+                  <p className="text-muted" style={{ fontSize: '0.9rem' }}>No comments yet</p>
                 )}
               </div>
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
     </div>
   );
