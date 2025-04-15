@@ -1,9 +1,11 @@
 import React from 'react';
+import dotenv from 'dotenv';
+dotenv.config();
 
 export default function Home() {
   const handleLogin = () => {
-    const clientId = "1359354858675859";
-    const redirectUri = "https://instagram-api-integration-server.vercel.app/api/auth/callback";
+    const clientId = process.env.FB_CLIENT_ID;
+    const redirectUri = process.env.FB_REDIRECT_URI;
     const scope = [
       "instagram_basic",
       "instagram_manage_insights",

@@ -1,4 +1,7 @@
-const VERIFY_TOKEN = 'IGAAOqhqipGmVBZAE1GRUxXVWNpTTloRThXUzg5OElUaUVHN2sxd2xyVXN2dkxJekEwWmhfMFVrZAkJpRWhUREotZAU9jVW94c2RKM0lNcGtNdjFvSXBMWDdBWldYenhtTjFXdmE0TUFmbDhZATDIyOE9TdUotSGN1TWdJWS1yT25VSQZDZD';
+import dotenv from 'dotenv';
+dotenv.config();
+
+const VERIFY_TOKEN = process.env.WEBHOOK_TOKEN;
 
 export default async function handler(req, res) {
   const { method, query, body } = req;
