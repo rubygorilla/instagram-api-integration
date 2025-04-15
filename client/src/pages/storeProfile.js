@@ -4,7 +4,7 @@ export default function StoreProfile() {
   useEffect(() => {
     const url = new URL(window.location.href);
     const dataParam = url.searchParams.get('data');
-    const token = query.get('token');
+    const token = url.searchParams.get('token');
 
     if (!dataParam) {
       console.error('Missing data parameter');
