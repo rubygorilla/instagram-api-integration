@@ -16,6 +16,7 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
+  console.log("req.body="+req.body)
   const { commentId, message, accessToken } = req.body;
 
   if (!commentId || !message || !accessToken) {
