@@ -3,10 +3,6 @@ import Lottie from 'lottie-react';
 import waveAnimation from '../assets/Animation.json';
 import Image from 'next/image';
 
-// ✅ Import images from assets
-import storyImage from '../assets/pexels-photo-122383_1.jpeg';
-import avatarImage from '../assets/pexels-photo-122383_2.jpeg';
-
 export default function Home() {
   const handleLogin = () => {
     const clientId = "1359354858675859";
@@ -28,11 +24,11 @@ export default function Home() {
       <div style={styles.cardContainer}>
         {/* Story Side */}
         <div style={styles.storySide}>
-          <Image src={storyImage} alt="Story" width={300} height={500} style={styles.storyImage} />
+          <Image src="/images/pexels-photo-122383_1.jpeg" alt="Story" width={300} height={500} style={styles.storyImage} />
           <div style={styles.storyCaption}>
             <p style={styles.storyText}>Welcome to my World!</p>
             <div style={styles.profileRow}>
-              <Image src={avatarImage} alt="Annette Black" width={30} height={30} style={styles.avatar} />
+              <Image src="/images/pexels-photo-122383_2.jpeg" alt="Annette Black" width={30} height={30} style={styles.avatar} />
               <span style={styles.username}>Annette Black</span>
             </div>
           </div>
