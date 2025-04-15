@@ -3,7 +3,7 @@ import React from 'react';
 export default function Home() {
   const handleLogin = () => {
     const clientId = process.env.REACT_APP_FB_CLIENT_ID;
-    const redirectUri = process.env.REACT_APP_REDIRECT_URI;
+    const redirectUri = "https://instagram-api-integration-server.vercel.app/api/auth/callback";
     const scope = [
       "instagram_basic",
       "instagram_manage_insights",

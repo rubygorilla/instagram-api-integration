@@ -16,7 +16,7 @@ export default async function handler(req, res) {
       params: {
         client_id: process.env.FB_CLIENT_ID,
         client_secret: process.env.FB_CLIENT_SECRET,
-        redirect_uri: process.env.FB_REDIRECT_URI,
+        redirect_uri: "https://instagram-api-integration-server.vercel.app/api/auth/callback",
         code,
       },
     });
