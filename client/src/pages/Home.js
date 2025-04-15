@@ -2,8 +2,8 @@ import React from 'react';
 
 export default function Home() {
   const handleLogin = () => {
-    const clientId = process.env.FB_CLIENT_ID;
-    const redirectUri = process.env.FB_REDIRECT_URI;
+    const clientId = process.env.REACT_APP_FB_CLIENT_ID;
+    const redirectUri = process.env.REACT_APP_REDIRECT_URI;
     const scope = [
       "instagram_basic",
       "instagram_manage_insights",
