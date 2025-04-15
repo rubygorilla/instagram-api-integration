@@ -1,4 +1,3 @@
-// iai_backend/pages/api/comments/reply.js
 import axios from 'axios';
 
 export default async function handler(req, res) {

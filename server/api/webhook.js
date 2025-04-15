@@ -1,5 +1,3 @@
-// api/webhook.js
-
 const VERIFY_TOKEN = 'IGAAOqhqipGmVBZAE1GRUxXVWNpTTloRThXUzg5OElUaUVHN2sxd2xyVXN2dkxJekEwWmhfMFVrZAkJpRWhUREotZAU9jVW94c2RKM0lNcGtNdjFvSXBMWDdBWldYenhtTjFXdmE0TUFmbDhZATDIyOE9TdUotSGN1TWdJWS1yT25VSQZDZD';
 
 export default async function handler(req, res) {
