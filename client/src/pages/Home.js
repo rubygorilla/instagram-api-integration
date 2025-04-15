@@ -24,7 +24,7 @@ export default function Home() {
       {/* Floating Header */}
       <div style={styles.header}>
         <h2 style={styles.headerText}>Instagram Integration Project</h2>
-        <p style={styles.credit}>Project developed by - Aakash</p>
+        <p style={styles.credit}>Project developed by - Aakash Pardeshi</p>
       </div>
 
       {/* Animated Title and Lottie Animation */}
@@ -84,8 +84,11 @@ const styles = {
     marginBottom: '20px',
   },
   lottie: {
-    width: '300px',
-    height: '300px',
+    position: 'absolute',
+    bottom: 0,
+    width: '100%',
+    height: 'auto',
+    zIndex: -1,
   },
   button: {
     padding: '15px 30px',
@@ -96,12 +99,5 @@ const styles = {
     color: '#764ba2',
     cursor: 'pointer',
     transition: 'background-color 0.3s ease',
-  },
-  lottie: {
-    position: 'absolute',
-    bottom: 0,
-    width: '100%',
-    height: 'auto',
-    zIndex: -1,
   }
 };
