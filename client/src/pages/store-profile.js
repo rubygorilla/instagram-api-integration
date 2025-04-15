@@ -6,20 +6,27 @@ export default function StoreProfile() {
   const router = useRouter();
 
   useEffect(() => {
-    const { data } = router.query;
-    if (data) {
-      try {
-        const parsed = JSON.parse(decodeURIComponent(data));
-        sessionStorage.setItem('profileData', JSON.stringify(parsed));
-        router.replace('/Profile');
-      } catch (err) {
-        console.error("Failed to parse/store profile data", err);
-        router.replace('/Profile?error=Invalid+data');
-      }
-    } else {
-      router.replace('/Profile?error=Missing+data');
+    try {
+      const cookieStr = document.cookie
+        .split('; ')
+        .find(row => row.startsWith('insta_profile='));
+
+      if (!cookieStr) throw new Error("Cookie not found");
+
+      const encodedData = cookieStr.split('=')[1];
+      const decoded = JSON.parse(decodeURIComponent(encodedData));
+
+      sessionStorage.setItem('profileData', JSON.stringify(decoded));
+
+      // Optionally delete the cookie (it's HttpOnly=false)
+      document.cookie = "insta_profile=; Max-Age=0; path=/";
+
+      router.replace('/Profile');
+    } catch (err) {
+      console.error("Failed to extract profile from cookie", err);
+      router.replace('/Profile?error=Cookie+error');
     }
-  }, [router.query]);
+  }, []);
 
   return <p>Storing profile data...</p>;
 }

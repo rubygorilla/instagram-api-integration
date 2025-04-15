@@ -98,7 +98,7 @@ export default async function handler(req, res) {
     // Store in HTTP-only secure cookie
     const encodedData = encodeURIComponent(JSON.stringify(profilePayload));
     res.setHeader('Set-Cookie', [
-      `insta_profile=${encodedData}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=300`,
+      `insta_profile=${encodedData}; Path=/; Secure; SameSite=Lax; Max-Age=300`,
     ]);
 
     // Redirect to a frontend route that reads the cookie and stores it in sessionStorage
