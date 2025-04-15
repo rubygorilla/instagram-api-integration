@@ -92,12 +92,17 @@ export default function Profile() {
           box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
         }
         .media-img {
-          height: 250px;
-          object-fit: cover;
+          width: 100%;
+          height: auto;
+          max-height: 300px;
           transition: transform 0.3s ease;
+          display: block;
+          margin: 0 auto;
+          aspect-ratio: 1 / 1;
+          object-fit: cover;
         }
         .media-img:hover {
-          transform: scale(1.03);
+          transform: scale(1.10);
         }
         .badge-image {
           background: linear-gradient(to right, #ff9a9e, #fad0c4);
