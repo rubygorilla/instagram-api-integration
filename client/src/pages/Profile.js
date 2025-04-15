@@ -92,17 +92,21 @@ export default function Profile() {
           box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
         }
         .media-img-wrapper {
-          height: 300px;
+          background: #fff;
+          max-height: 400px;
           overflow: hidden;
-          border-top-left-radius: 1rem;
-          border-top-right-radius: 1rem;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          padding: 1rem;
         }
         .media-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover; /* This makes it fill and crop correctly */
+          max-height: 100%;
+          max-width: 100%;
+          object-fit: contain; /* This ensures no cropping */
+          border-top-left-radius: 1rem;
+          border-top-right-radius: 1rem;
           display: block;
-          transition: transform 0.3s ease;
         }
         .media-img:hover {
           transform: scale(1.10);
