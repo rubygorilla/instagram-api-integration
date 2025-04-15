@@ -36,6 +36,9 @@ export default function Profile() {
   };
 
   const handleReplySubmit = async (mediaId, commentId) => {
+    console.log("mediaId = "+mediaId);
+    console.log("commentId = "+commentId);
+
     const text = replyText[commentId];
     if (!text?.trim()) return;
   
@@ -49,7 +52,7 @@ export default function Profile() {
       const res = await fetch(`https://iaibackend.vercel.app/api/comments/reply`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ mediaId, commentId, message: text, token }), // ✅ include accessToken
+        body: JSON.stringify({ commentId, message: text, accessToken: token }),
       });
   
       const result = await res.json();
@@ -66,7 +69,6 @@ export default function Profile() {
       setSendingReply(prev => ({ ...prev, [commentId]: false }));
     }
   };
-  ;
 
   if (error) return <p style={{ color: 'red' }}>Error: {error}</p>;
   if (!profileData) return <p>Loading profile data...</p>;
