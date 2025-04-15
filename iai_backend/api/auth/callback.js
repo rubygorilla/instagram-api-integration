@@ -95,6 +95,18 @@ export default async function handler(req, res) {
       media: mediaRes.data.data,
     };
 
-    // Set data in cookie (secure, HTTP-only)
+    // Store in HTTP-only secure cookie
+    const encodedData = encodeURIComponent(JSON.stringify(profilePayload));
     res.setHeader('Set-Cookie', [
-      `insta_profile=${encodeURIComponent(JSON.stringify(profilePayload))}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=
+      `insta_profile=${encodedData}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=300`,
+    ]);
+
+    // Redirect to a frontend route that reads the cookie and stores it in sessionStorage
+    res.redirect('https://instagram-api-integration.vercel.app/store-profile');
+
+  } catch (err) {
+    console.error('❌ API Error:', err.response?.data || err.message);
+    const errorMsg = encodeURIComponent(err.response?.data?.error?.message || err.message);
+    res.redirect(`/error?message=${errorMsg}`);
+  }
+}
