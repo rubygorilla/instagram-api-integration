@@ -134,7 +134,7 @@ export default function Profile() {
         }
       `}</style>
 
-      <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
+      <div className="container" style={{  maxWidth: '1200px',margin: '0 auto' ,paddingLeft: '1rem', paddingRight: '1rem',}}>
         {/* Profile Header */}
         <div className="text-center mb-5 text-white">
           <h2 className="fw-bold">📸 Instagram Profile</h2>
@@ -169,7 +169,7 @@ export default function Profile() {
         {/* Media Cards */}
         <div className="row">
           {filteredMedia?.map(media => (
-            <div key={media.id} className="col-md-4 mb-4">
+            <div key={media.id} className="col-md-6 mb-4">
               <div className="card media-card h-100 border-0">
                 <a href={media.permalink} target="_blank" rel="noopener noreferrer">
                   <img
