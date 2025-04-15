@@ -94,12 +94,11 @@ export default function Profile() {
         .media-img {
           width: 100%;
           height: auto;
+          object-fit: contain; /* Show full image */
           max-height: 300px;
           transition: transform 0.3s ease;
           display: block;
           margin: 0 auto;
-          aspect-ratio: 1 / 1;
-          object-fit: cover;
         }
         .media-img:hover {
           transform: scale(1.10);
@@ -177,11 +176,13 @@ export default function Profile() {
             <div key={media.id} className="col-md-6 mb-4">
               <div className="card media-card h-100 border-0">
                 <a href={media.permalink} target="_blank" rel="noopener noreferrer">
+                <div style={{ height: '300px', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                   <img
                     src={media.media_url}
                     alt={media.caption || 'Instagram media'}
                     className="card-img-top media-img"
                   />
+                </div>
                 </a>
                 <div className="card-body">
                   <span className={`badge mb-2 ${
