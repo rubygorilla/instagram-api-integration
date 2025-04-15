@@ -79,6 +79,61 @@ export default function Profile() {
       padding: '2rem 0',
       fontFamily: 'Inter, sans-serif',
     }}>
+      <style jsx>{`
+        .media-card {
+          border-radius: 1rem;
+          overflow: hidden;
+          background: rgba(255, 255, 255, 0.95);
+          box-shadow: 0 8px 30px rgba(0, 0, 0, 0.1);
+          transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .media-card:hover {
+          transform: translateY(-8px);
+          box-shadow: 0 12px 35px rgba(0, 0, 0, 0.15);
+        }
+        .media-img {
+          height: 250px;
+          object-fit: cover;
+          transition: transform 0.3s ease;
+        }
+        .media-img:hover {
+          transform: scale(1.03);
+        }
+        .badge-image {
+          background: linear-gradient(to right, #ff9a9e, #fad0c4);
+          color: #000;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 0.75rem;
+        }
+        .badge-video {
+          background: linear-gradient(to right, #a18cd1, #fbc2eb);
+          color: #000;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 0.75rem;
+        }
+        .badge-reel {
+          background: linear-gradient(to right, #fbc2eb, #a6c1ee);
+          color: #000;
+          padding: 4px 8px;
+          border-radius: 12px;
+          font-size: 0.75rem;
+        }
+        .btn-outline-light {
+          border-color: #fff;
+          color: #fff;
+          transition: all 0.3s ease;
+        }
+        .btn-outline-light:hover {
+          background-color: #fff;
+          color: #000;
+        }
+        input.form-control-sm {
+          border-radius: 0.5rem;
+        }
+      `}</style>
+
       <div className="container" style={{ maxWidth: '1000px', margin: '0 auto' }}>
         {/* Profile Header */}
         <div className="text-center mb-5 text-white">
@@ -104,7 +159,9 @@ export default function Profile() {
               onClick={() => setFilter(type)}
               className={`btn btn-sm rounded-pill px-3 ${filter === type ? 'btn-light text-dark' : 'btn-outline-light'}`}
             >
-              {type}
+              {type === 'IMAGE' ? '🖼️ Image' :
+               type === 'VIDEO' ? '🎬 Video' :
+               type === 'REEL' ? '🎞️ Reel' : '📁 All'}
             </button>
           ))}
         </div>
@@ -113,18 +170,26 @@ export default function Profile() {
         <div className="row">
           {filteredMedia?.map(media => (
             <div key={media.id} className="col-md-4 mb-4">
-              <div className="card h-100 shadow-sm border-0" style={{ borderRadius: '1rem', overflow: 'hidden' }}>
+              <div className="card media-card h-100 border-0">
                 <a href={media.permalink} target="_blank" rel="noopener noreferrer">
                   <img
                     src={media.media_url}
                     alt={media.caption || 'Instagram media'}
-                    className="card-img-top"
-                    style={{ height: 250, objectFit: 'cover' }}
+                    className="card-img-top media-img"
                   />
                 </a>
                 <div className="card-body">
+                  <span className={`badge mb-2 ${
+                    media.media_type === 'IMAGE' ? 'badge-image' :
+                    media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? 'badge-reel' :
+                    'badge-video'
+                  }`}>
+                    {media.media_type === 'IMAGE' ? '🖼️ Image' :
+                     media.media_type === 'VIDEO' && media.caption?.toLowerCase().includes('reel') ? '🎞️ Reel' :
+                     '🎬 Video'}
+                  </span>
                   <p className="card-text fw-semibold">{media.caption?.slice(0, 100) || 'No caption'}</p>
-                  <p className="text-muted" style={{ fontSize: '0.85rem' }}>
+                  <p className="text-muted small">
                     {new Date(media.timestamp).toLocaleDateString()}
                   </p>
                   <h6 className="mt-3">💬 Comments</h6>
@@ -151,7 +216,7 @@ export default function Profile() {
                       </div>
                     ))
                   ) : (
-                    <p className="text-muted" style={{ fontSize: '0.85rem' }}>No comments yet</p>
+                    <p className="text-muted small">No comments yet</p>
                   )}
                 </div>
               </div>
