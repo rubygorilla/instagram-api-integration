@@ -3,7 +3,7 @@ import axios from 'axios';
 
 export default async function handler(req, res) {
   const { code } = req.query;
-  console.log("Received code =", code);
+  console.log("🔁 OAuth callback triggered");
 
   if (!code) return res.status(400).send('Missing code');
 
@@ -11,15 +11,14 @@ export default async function handler(req, res) {
     // 1. Exchange code for access token
     const tokenRes = await axios.get('https://graph.facebook.com/v19.0/oauth/access_token', {
       params: {
-        client_id: "1359354858675859",
-        client_secret: "3856a375446d139ca3a3ff7509f27d17",
-        redirect_uri: "https://iaibackend.vercel.app/api/auth/callback",
+        client_id: process.env.FB_CLIENT_ID,
+        client_secret: process.env.FB_CLIENT_SECRET,
+        redirect_uri: process.env.FB_REDIRECT_URI,
         code,
       },
     });
 
     const accessToken = tokenRes.data.access_token;
-    console.log("✅ Access Token:", accessToken);
 
     // 2. Get businesses
     const businessRes = await axios.get('https://graph.facebook.com/v19.0/me/businesses', {
@@ -28,7 +27,7 @@ export default async function handler(req, res) {
 
     const businesses = businessRes.data.data;
     if (!businesses.length) {
-      return res.redirect(`/Profile?error=${encodeURIComponent('No businesses found')}`);
+      return res.redirect(`/error?message=${encodeURIComponent('No businesses found')}`);
     }
 
     const businessId = businesses[0].id;
@@ -45,12 +44,12 @@ export default async function handler(req, res) {
     const page = pages[0];
 
     if (!page) {
-      return res.redirect(`/Profile?error=${encodeURIComponent('No pages found under business')}`);
+      return res.redirect(`/error?message=${encodeURIComponent('No pages found under business')}`);
     }
 
     const igId = page.instagram_business_account?.id;
     if (!igId) {
-      return res.redirect(`/Profile?error=${encodeURIComponent('No Instagram account linked to this Page')}`);
+      return res.redirect(`/error?message=${encodeURIComponent('No Instagram account linked to this Page')}`);
     }
 
     // 4. Get Instagram profile
@@ -79,7 +78,7 @@ export default async function handler(req, res) {
       },
     });
 
-    // ⭐️ 6. NEW: Get media
+    // 6. Get media
     const mediaRes = await axios.get(`https://graph.facebook.com/v19.0/${igId}/media`, {
       params: {
         fields: 'id,caption,media_type,media_url,thumbnail_url,timestamp,permalink',
@@ -87,21 +86,15 @@ export default async function handler(req, res) {
       },
     });
 
-    const responsePayload = {
+    const profilePayload = {
       profile: igProfileRes.data,
       stats: {
         follower_count: followerCountRes.data,
         reach: reachRes.data,
       },
-      media: mediaRes.data.data, // ⭐️ Include media here
+      media: mediaRes.data.data,
     };
 
-    const encodedData = encodeURIComponent(JSON.stringify(responsePayload));
-    res.redirect(`https://instagram-api-integration.vercel.app/Profile?data=${encodedData}`);
-
-  } catch (err) {
-    console.error('❌ API Error:', err.response?.data || err.message);
-    const errorMsg = encodeURIComponent(err.response?.data?.error?.message || err.message);
-    res.redirect(`/Profile?error=${errorMsg}`);
-  }
-}
+    // Set data in cookie (secure, HTTP-only)
+    res.setHeader('Set-Cookie', [
+      `insta_profile=${encodeURIComponent(JSON.stringify(profilePayload))}; Path=/; HttpOnly; Secure; SameSite=Lax; Max-Age=
