@@ -7,8 +7,9 @@ export default function StoreProfile() {
 
   useEffect(() => {
     // Fix Facebook redirect quirk
+    // Clean up Facebook hash fragment
     if (window.location.hash === '#_=_') {
-      history.replaceState(null, '', window.location.pathname);
+      window.history.replaceState(null, '', window.location.pathname);
     }
 
     try {
