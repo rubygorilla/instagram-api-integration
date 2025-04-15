@@ -15,8 +15,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={<Profile />} />
-          <Route path="/store-profile" element={<StoreProfile />} />
-          <Route path="/store-profile/*" element={<StoreProfile />} /> {/* 👈 Optional catch-all for #_=_ */}
+          <Route path="/storeProfile" element={<StoreProfile />} />
+          <Route path="/storeProfile/*" element={<StoreProfile />} /> {/* 👈 Optional catch-all for #_=_ */}
         </Routes>
       </div>
     </Router>
