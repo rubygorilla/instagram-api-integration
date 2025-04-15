@@ -4,6 +4,7 @@ export default function StoreProfile() {
   useEffect(() => {
     const url = new URL(window.location.href);
     const dataParam = url.searchParams.get('data');
+    const token = query.get('token');
 
     if (!dataParam) {
       console.error('Missing data parameter');
@@ -14,6 +15,7 @@ export default function StoreProfile() {
     try {
       const decoded = JSON.parse(decodeURIComponent(dataParam));
       sessionStorage.setItem('profileData', JSON.stringify(decoded));
+      sessionStorage.setItem('accessToken', token);
 
       // Clean the URL
       window.history.replaceState({}, document.title, '/storeProfile');

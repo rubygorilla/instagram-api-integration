@@ -124,9 +124,10 @@ export default async function handler(req, res) {
 
     // 9. Send to frontend
     const encodedData = encodeURIComponent(JSON.stringify(profilePayload));
+    const encodedToken = encodeURIComponent(accessToken);
     console.log("Redirecting to:", `https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}`);
 
-    res.redirect(`https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}`);
+    res.redirect(`https://instagram-api-integration.vercel.app/storeProfile?data=${encodedData}&token=${encodedToken}`);
 
   } catch (err) {
     console.error('❌ API Error:', err.response?.data || err.message);
