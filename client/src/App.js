@@ -14,9 +14,7 @@ function App() {
         <Route
           path="/profile"
           element={
-            <div className="container mt-4">
               <Profile />
-            </div>
           }
         />
         <Route
