@@ -11,8 +11,6 @@ A web application built with the MERN stack that integrates with Instagram API L
 
 ## Technologies Used
 
-- MongoDB
-- Express.js
 - React.js
 - Node.js
 - Instagram API
